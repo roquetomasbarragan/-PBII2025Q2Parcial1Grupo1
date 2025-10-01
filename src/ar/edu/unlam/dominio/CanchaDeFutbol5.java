@@ -4,8 +4,8 @@ public class CanchaDeFutbol5 extends Cancha {
 
 	private static final Integer CapacidadMax = 10;
 	
-	public CanchaDeFutbol5( Double precioBase) {
-		super( precioBase);
+	public CanchaDeFutbol5( Double precioBase, Integer idCancha) {
+		super( precioBase, idCancha);
 		
 	}
 

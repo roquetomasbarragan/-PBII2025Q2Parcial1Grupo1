@@ -1,9 +1,10 @@
 package ar.edu.unlam.dominio;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-public class Reserva {
+public class ReservaBase{
 
 	private Cliente clienteTitular;
 	private Cancha cancha;
@@ -11,7 +12,7 @@ public class Reserva {
 	private LocalDateTime horaFinal;
 	private Integer id;
 
-	public Reserva(Cliente clienteTitular, Cancha cancha, LocalDateTime horaInicio, LocalDateTime horaFinal, Integer id) {
+	public ReservaBase(Cliente clienteTitular, Cancha cancha, LocalDateTime horaInicio, LocalDateTime horaFinal, Integer id) {
 		this.clienteTitular = clienteTitular;
 		this.cancha = cancha;
 		this.horaInicio = horaInicio;
@@ -36,7 +37,7 @@ public class Reserva {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Reserva other = (Reserva) obj;
+		ReservaBase other = (ReservaBase) obj;
 		return Objects.equals(id, other.id);
 	}
 
@@ -62,21 +63,19 @@ public class Reserva {
 		return horaInicio;
 	}
 
-	public void setHoraInicio(LocalDateTime horaInicio) {
-		this.horaInicio = horaInicio;
-	}
-
+	
 	public LocalDateTime getHoraFinal() {
 		return horaFinal;
 	}
 
-	public void setHoraFinal(LocalDateTime horaFinal) {
-		this.horaFinal = horaFinal;
-	}
-
+	
 	public Integer getId() {
 		return id;
 	}
+
+
+
+
 
 	
 	
