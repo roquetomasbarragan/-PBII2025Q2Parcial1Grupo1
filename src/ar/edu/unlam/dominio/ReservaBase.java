@@ -1,7 +1,7 @@
 package ar.edu.unlam.dominio;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Objects;
 
 public class ReservaBase{
@@ -10,21 +10,19 @@ public class ReservaBase{
 	private Cancha cancha;
 	private LocalDateTime horaInicio;
 	private LocalDateTime horaFinal;
-	private Integer id;
+	private Integer idReserva;
 
-	public ReservaBase(Cliente clienteTitular, Cancha cancha, LocalDateTime horaInicio, LocalDateTime horaFinal, Integer id) {
+	public ReservaBase(Cliente clienteTitular, Cancha cancha, LocalDateTime horaInicio) {
 		this.clienteTitular = clienteTitular;
 		this.cancha = cancha;
 		this.horaInicio = horaInicio;
-		this.horaFinal = horaFinal;
-		this.id = id;
+		this.horaFinal = horaInicio.plusHours(1);
 	}
 
 	
-	
 	@Override
 	public int hashCode() {
-		return Objects.hash(id);
+		return Objects.hash(idReserva);
 	}
 
 
@@ -38,7 +36,7 @@ public class ReservaBase{
 		if (getClass() != obj.getClass())
 			return false;
 		ReservaBase other = (ReservaBase) obj;
-		return Objects.equals(id, other.id);
+		return Objects.equals(idReserva, other.idReserva);
 	}
 
 
@@ -55,9 +53,6 @@ public class ReservaBase{
 		return cancha;
 	}
 
-	public void setCancha(Cancha cancha) {
-		this.cancha = cancha;
-	}
 
 	public LocalDateTime getHoraInicio() {
 		return horaInicio;
@@ -69,9 +64,26 @@ public class ReservaBase{
 	}
 
 	
-	public Integer getId() {
-		return id;
+	public Integer getIdReserva() {
+		return idReserva;
 	}
+
+
+	public void setIdReserva(Integer idReserva) {
+		this.idReserva = idReserva;
+	}
+
+
+
+	public Boolean verificarSiEsNocturna(ReservaBase reserva) {
+		Boolean esNocturna = false;
+		LocalTime horaDeInicioDeReserva = reserva.getHoraInicio().toLocalTime();
+		if(horaDeInicioDeReserva.isAfter(LocalTime.of(20, 0))){
+			esNocturna = true;
+		}
+		return esNocturna;
+	}
+
 
 
 

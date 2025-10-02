@@ -10,39 +10,46 @@ import org.junit.Test;
 public class SistemaDeReservasDeCanchasDeportivasTest {
 
 	@Test
-	public void dadoQueExisteUnGestorDeReservasDeCanchasSePuedeCrearUnaCanchaExitosamenteElMetodoDevuelveTrue() {
+	public void dadoQueExisteUnGestorDeReservasDeCanchasSePuedeCrearUnaCanchaDeFutbolDeTenisYDePaddleExitosamente() {
 
 		GestorDeReserva gestor = new GestorDeReserva();
 
-		Integer cantMaxPersonas = 10;
 		Double precioBasePorHora = 20000.00;
+		Cancha canchaDeFutbol = new CanchaDeFutbol5 (precioBasePorHora);
+		Boolean seAgregoFutbol = gestor.agregarCancha(canchaDeFutbol);
+		
+		
+		Double precioBasePorHora2 = 27000.0;
+		Cancha canchaDeTenis = new CanchaDeTenis(precioBasePorHora2);
+		Boolean seAgregoTenis = gestor.agregarCancha(canchaDeTenis);
 
-		Integer idCancha = 1;
-		Cancha canchaDeFutbol = new CanchaDeFutbol5(precioBasePorHora, idCancha);
+		Double precioBasePorHora3 = 23000.0;
+		Cancha canchaDePaddle = new CanchaDePaddle(precioBasePorHora3);
+		Boolean seAgregoPaddle = gestor.agregarCancha(canchaDePaddle);
 
-		Boolean seAgrego = gestor.agregarCancha(canchaDeFutbol);
-
-		assertTrue(seAgrego);
+		assertTrue(seAgregoFutbol);
+		assertTrue(seAgregoTenis);
+		assertTrue(seAgregoPaddle);
 	}
+
+		
 
 	@Test
 	public void dadoQueExisteUnGestorDeReservasYUnaCanchaElClientePuedeReservarlaElMetodoDevuelveTrue() {
 		GestorDeReserva gestor = new GestorDeReserva();
 
-		Integer cantMaxPersonas = 10;
 		Double precioBasePorHora = 20000.00;
 
-		Cancha cancha = new CanchaDeFutbol5(precioBasePorHora,1);
+		Cancha cancha = new CanchaDeFutbol5 (precioBasePorHora);
 		gestor.agregarCancha(cancha);
 		
 		LocalDateTime horaInicio = LocalDateTime.of(2025, 10, 01, 20, 00);
-		LocalDateTime horaFinal = LocalDateTime.of(2025, 10, 01, 21, 00);
 		
 		String nombre = "Juan";
 		Integer dni = 123;
 		Cliente clienteTitular = new Cliente(nombre, dni);
-		Integer id = 1;
-		ReservaBase reserva = new ReservaBase(clienteTitular, cancha, horaInicio, horaFinal, id);
+		
+		ReservaBase reserva = new ReservaBase(clienteTitular, cancha, horaInicio);
 		
 		Boolean seAgregoReserva = gestor.agregarReserva(reserva);
 		
@@ -52,34 +59,53 @@ public class SistemaDeReservasDeCanchasDeportivasTest {
 	@Test 
 	public void dadoQueExisteUnaCanchaReservadaNoSePuedeReservarLaMismaEnElMismoHorarioElMetodoDevuelveFalse() {
 		
-		
 		GestorDeReserva gestor = new GestorDeReserva();
 
-		Integer cantMaxPersonas = 10;
 		Double precioBasePorHora = 20000.00;
 
-		Cancha cancha = new CanchaDeFutbol5(precioBasePorHora, 1);
-		gestor.agregarCancha(cancha);
+		Cancha cancha = new CanchaDeFutbol5 (precioBasePorHora);
+		gestor.agregarCancha(cancha);  
+		
 		
 		LocalDateTime horaInicio = LocalDateTime.of(2025, 10, 01, 20, 00);
-		LocalDateTime horaFinal = LocalDateTime.of(2025, 10, 01, 21, 00);
+		Cliente clienteTitular = new Cliente("Juan", 123);
+		ReservaBase reserva = new ReservaBase(clienteTitular, cancha, horaInicio);
 		
-		String nombre = "Juan";
-		Integer dni = 123;
-		Cliente clienteTitular = new Cliente(nombre, dni);
-		Integer id = 1;
-		ReservaBase reserva = new ReservaBase(clienteTitular, cancha, horaInicio, horaFinal, id);
 		gestor.agregarReserva(reserva);
 		
 		
-		Cliente clienteTitular2 = new Cliente("Pedro", 235);
 		LocalDateTime horaInicio2 = LocalDateTime.of(2025, 10, 01, 20, 00);
-		LocalDateTime horaFinal2 = LocalDateTime.of(2025, 10, 01, 21, 00);
-		ReservaBase reserva2 = new ReservaBase(clienteTitular2, cancha, horaInicio2, horaFinal2, 2);
+		Cliente clienteTitular2 = new Cliente("Pedro", 235);
+		ReservaBase reserva2 = new ReservaBase(clienteTitular2, cancha, horaInicio2);
 		
 		Boolean seAgregoReserva2 = gestor.agregarReserva(reserva2);
+		
+		
 		assertFalse(seAgregoReserva2);
 	
+	}
+	
+	@Test 
+	public void dadoQueExisteUnaReservaPuedoVerificarSiEsNocturnaSiSuHorarioDeInicioEsPosteriorALas20() {
+		
+		GestorDeReserva gestor = new GestorDeReserva();
+
+		Double precioBasePorHora = 20000.00;
+
+		Cancha cancha = new CanchaDeFutbol5 (precioBasePorHora);
+		gestor.agregarCancha(cancha);  
+		
+		
+		LocalDateTime horaInicio = LocalDateTime.of(2025, 10, 01, 20, 30);
+		Cliente clienteTitular = new Cliente("Juan", 123);
+		ReservaBase reserva = new ReservaBase(clienteTitular, cancha, horaInicio);
+		
+		gestor.agregarReserva(reserva);
+		
+		Boolean esNocturna = reserva.verificarSiEsNocturna(reserva);
+		
+		assertTrue(esNocturna);
+		
 	}
 	
 	

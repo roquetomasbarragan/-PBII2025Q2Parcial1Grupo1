@@ -8,12 +8,15 @@ public abstract class Cancha {
 	private Double precioBasePorHora;
 	private Integer idCancha;
 
-	public Cancha( Double precioBasePorHora, Integer idCancha) {
-		this.idCancha = idCancha;
+	public Cancha( Double precioBasePorHora) {
 		this.precioBasePorHora = precioBasePorHora;
 	}
 	
 	public abstract Integer getCapacidadMax();
+
+	public void setIdCancha(Integer idCancha) {
+		this.idCancha = idCancha;
+	}
 
 	public Double getPrecioBasePorHora() {
 		return precioBasePorHora;
@@ -39,7 +42,6 @@ public abstract class Cancha {
 	public Integer getIdCancha() {
 		return idCancha;
 	}
-
 	
 
 	
