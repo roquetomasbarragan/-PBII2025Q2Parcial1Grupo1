@@ -1,5 +1,6 @@
 package ar.edu.unlam.dominio;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -14,10 +15,8 @@ public class SistemaDeReservasDeCanchasDeportivasTest {
 
 		GestorDeReserva gestor = new GestorDeReserva();
 
-		Integer cantMaxPersonas = 10;
 		Double precioBasePorHora = 20000.00;
 
-		Integer idCancha = 1;
 		Cancha canchaDeFutbol = new CanchaDeFutbol5(precioBasePorHora);
 
 		Boolean seAgrego = gestor.agregarCancha(canchaDeFutbol);
@@ -29,19 +28,16 @@ public class SistemaDeReservasDeCanchasDeportivasTest {
 	public void dadoQueExisteUnGestorDeReservasDeCanchasYUnaCanchaElClientePuedeReservarlaElMetodoDevuelveTrue() {
 		GestorDeReserva gestor = new GestorDeReserva();
 
-		Integer cantMaxPersonas = 10;
 		Double precioBasePorHora = 20000.00;
 
 		Cancha cancha = new CanchaDeFutbol5(precioBasePorHora);
 		gestor.agregarCancha(cancha);
 		
 		LocalDateTime horaInicio = LocalDateTime.of(2025, 10, 01, 20, 00);
-		LocalDateTime horaFinal = LocalDateTime.of(2025, 10, 01, 21, 00);
 		
 		String nombre = "Juan";
 		Integer dni = 123;
 		Cliente clienteTitular = new Cliente(nombre, dni);
-		Integer id = 1;
 		ReservaBase reserva = new ReservaBase(clienteTitular, cancha, horaInicio);
 		
 		Boolean seAgregoReserva = gestor.agregarReserva(reserva);
@@ -55,26 +51,22 @@ public class SistemaDeReservasDeCanchasDeportivasTest {
 		
 		GestorDeReserva gestor = new GestorDeReserva();
 
-		Integer cantMaxPersonas = 10;
 		Double precioBasePorHora = 20000.00;
 
 		Cancha cancha = new CanchaDeFutbol5(precioBasePorHora);
 		gestor.agregarCancha(cancha);
 		
 		LocalDateTime horaInicio = LocalDateTime.of(2025, 10, 01, 20, 00);
-		LocalDateTime horaFinal = LocalDateTime.of(2025, 10, 01, 21, 00);
 		
 		String nombre = "Juan";
 		Integer dni = 123;
 		Cliente clienteTitular = new Cliente(nombre, dni);
-		Integer id = 1;
 		ReservaBase reserva = new ReservaBase(clienteTitular, cancha, horaInicio);
 		gestor.agregarReserva(reserva);
 		
 		
 		Cliente clienteTitular2 = new Cliente("Pedro", 235);
 		LocalDateTime horaInicio2 = LocalDateTime.of(2025, 10, 01, 20, 00);
-		LocalDateTime horaFinal2 = LocalDateTime.of(2025, 10, 01, 21, 00);
 		ReservaBase reserva2 = new ReservaBase(clienteTitular2, cancha, horaInicio2);
 		
 		Boolean seAgregoReserva2 = gestor.agregarReserva(reserva2);
@@ -94,12 +86,10 @@ public class SistemaDeReservasDeCanchasDeportivasTest {
 		gestor.agregarCancha(cancha);
 		
 		LocalDateTime horaInicio = LocalDateTime.of(2025, 10, 01, 20, 00);
-		LocalDateTime horaFinal = LocalDateTime.of(2025, 10, 01, 21, 00);
 		
 		String nombre = "Juan";
 		Integer dni = 123;
 		Cliente clienteTitular = new Cliente(nombre, dni);
-		Integer id = 1;
 		ReservaBase reserva = new ReservaBase(clienteTitular, cancha, horaInicio);
 		gestor.agregarReserva(reserva);
 		
@@ -124,12 +114,10 @@ public class SistemaDeReservasDeCanchasDeportivasTest {
 		gestor.agregarCancha(cancha);
 		
 		LocalDateTime horaInicio = LocalDateTime.of(2025, 10, 01, 20, 00);
-		LocalDateTime horaFinal = LocalDateTime.of(2025, 10, 01, 21, 00);
 		
 		String nombre = "Juan";
 		Integer dni = 123;
 		Cliente clienteTitular = new Cliente(nombre, dni);
-		Integer id = 1;
 		ReservaBase reserva = new ReservaBase(clienteTitular, cancha, horaInicio);
 		gestor.agregarReserva(reserva);
 		
@@ -141,6 +129,100 @@ public class SistemaDeReservasDeCanchasDeportivasTest {
 		
 		assertFalse(seAgregoElItem);
 	}
+	
+	@Test 
+	public void dadoQueExisteUnaCanchaDeTenisYUnaReservaElClientePuedeAgregarRaquetasDeTenis() {
+		
+		
+		GestorDeReserva gestor = new GestorDeReserva();
+		
+		Double precioBasePorHora = 20000.00;
+		
+		Cancha cancha = new CanchaDeTenis(precioBasePorHora);
+		gestor.agregarCancha(cancha);
+		
+		LocalDateTime horaInicio = LocalDateTime.of(2025, 10, 01, 20, 00);
+		
+		String nombre = "Juan";
+		Integer dni = 123;
+		Cliente clienteTitular = new Cliente(nombre, dni);
+		ReservaBase reserva = new ReservaBase(clienteTitular, cancha, horaInicio);
+		gestor.agregarReserva(reserva);
+		
+		
+		ItemAdicional raquetaDeTenis = new RaquetaDeTenis();
+		
+		Boolean seAgregoElItem = reserva.agregarItemAdicional(raquetaDeTenis , cancha);
+		
+		assertTrue(seAgregoElItem);
+	}
+	
+	@Test 
+	public void dadoQueExisteUnaCanchaYMuchasReservasPuedoIdentificarUnaReservaSoloConSuiID() {
+		
+		GestorDeReserva gestor = new GestorDeReserva();
+
+		Double precioBasePorHora = 20000.00;
+
+		Cancha cancha = new CanchaDeFutbol5(precioBasePorHora);
+		gestor.agregarCancha(cancha);
+		
+		LocalDateTime horaInicio = LocalDateTime.of(2025, 10, 01, 20, 00);
+		
+		Cliente clienteTitular = new Cliente("Juan", 123);
+		ReservaBase reservaDeJuan = new ReservaBase(clienteTitular, cancha, horaInicio);
+		gestor.agregarReserva(reservaDeJuan);
+		
+		
+		Cliente clienteTitular2 = new Cliente("Pedro", 235);
+		LocalDateTime horaInicio2 = LocalDateTime.of(2025, 10, 01, 23, 00);
+		ReservaBase reservaDePedro = new ReservaBase(clienteTitular2, cancha, horaInicio2);
+		
+		gestor.agregarReserva(reservaDePedro);
+		
+		//Quiero obtener la reserva de Pedro
+		Integer IdDeReserva = reservaDePedro.getIdReserva();
+		
+		ReservaBase reservaEsperada = reservaDePedro;
+		ReservaBase reservaEncontrada = gestor.obtenerReservaPorId(IdDeReserva);
+		
+		assertEquals(reservaEsperada, reservaEncontrada);
+		
+	}
+	
+	@Test 
+	public void dadoQuePuedoIdentificarUnaReservaConItemsSoloConSuiIdPuedoFinalizarlaYObtenerElImporteTotalAPagar() {
+		
+		GestorDeReserva gestor = new GestorDeReserva();
+		
+		Double precioBasePorHora = 20000.00;
+		
+		Cancha cancha = new CanchaDeFutbol5(precioBasePorHora);
+		gestor.agregarCancha(cancha);
+		
+		Cliente clienteTitular = new Cliente("Pedro", 235);
+		LocalDateTime horaInicio = LocalDateTime.of(2025, 10, 01, 20, 00);
+		ReservaBase reserva = new ReservaBase(clienteTitular, cancha, horaInicio);
+		
+		gestor.agregarReserva(reserva);
+		
+		ItemAdicional pelota = new PelotaDeFutbol();
+		reserva.agregarItemAdicional(pelota , cancha);
+		
+		Integer IdDeReserva = reserva.getIdReserva();
+		
+		Double valorObtenido = gestor.finalizarReserva(IdDeReserva);
+		Double valorEsperado = 25000D;
+		
+		assertEquals(valorEsperado, valorObtenido);
+		
+		
+	}
+	
+
+	
+	
+	
 	
 	
 }

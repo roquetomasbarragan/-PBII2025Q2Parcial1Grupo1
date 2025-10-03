@@ -62,7 +62,7 @@ public class ReservaBase {
 	public LocalDateTime getHoraFinal() {
 		return horaFinal;
 	}
-	
+
 	public Integer getIdReserva() {
 		return idReserva;
 	}
@@ -72,12 +72,16 @@ public class ReservaBase {
 	}
 
 	public Boolean agregarItemAdicional(ItemAdicional item, Cancha cancha) {
-
-		if (item.esCompatibleConLaCancha(cancha)) {
-			return this.items.add(item);
-		}
+		if (item.esCompatibleConLaCancha(cancha)) {			
+				return this.items.add(item);
+			}
 
 		return false;
 	}
+
+	public List<ItemAdicional> getItems() {
+		return items;
+	}
+
 
 }

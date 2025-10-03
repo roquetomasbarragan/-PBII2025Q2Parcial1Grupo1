@@ -6,7 +6,6 @@ public class PelotaDeFutbol implements ItemAdicional {
 	
 	@Override
 	public Double calcularCosto() {
-		
 		return this.precioPelota;
 	}
 
