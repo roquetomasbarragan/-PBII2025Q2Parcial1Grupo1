@@ -1,32 +1,31 @@
 package ar.edu.unlam.dominio;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
-public class ReservaBase{
+public class ReservaBase {
 
 	private Cliente clienteTitular;
 	private Cancha cancha;
 	private LocalDateTime horaInicio;
 	private LocalDateTime horaFinal;
 	private Integer idReserva;
+	private List<ItemAdicional> items;
 
-	public ReservaBase(Cliente clienteTitular, Cancha cancha, LocalDateTime horaInicio, LocalDateTime horaFinal) {
+	public ReservaBase(Cliente clienteTitular, Cancha cancha, LocalDateTime horaInicio) {
 		this.clienteTitular = clienteTitular;
 		this.cancha = cancha;
 		this.horaInicio = horaInicio;
 		this.horaFinal = horaInicio.plusHours(1);
+		this.items = new ArrayList<>();
 	}
 
-	
-	
 	@Override
 	public int hashCode() {
 		return Objects.hash(idReserva);
 	}
-
-
 
 	@Override
 	public boolean equals(Object obj) {
@@ -39,8 +38,6 @@ public class ReservaBase{
 		ReservaBase other = (ReservaBase) obj;
 		return Objects.equals(idReserva, other.idReserva);
 	}
-
-
 
 	public Cliente getClienteTitular() {
 		return clienteTitular;
@@ -62,11 +59,9 @@ public class ReservaBase{
 		return horaInicio;
 	}
 
-	
 	public LocalDateTime getHoraFinal() {
 		return horaFinal;
 	}
-
 	
 	public Integer getIdReserva() {
 		return idReserva;
@@ -76,14 +71,13 @@ public class ReservaBase{
 		this.idReserva = id;
 	}
 
+	public Boolean agregarItemAdicional(ItemAdicional item, Cancha cancha) {
 
+		if (item.esCompatibleConLaCancha(cancha)) {
+			return this.items.add(item);
+		}
 
-
-
-	
-	
-	
-	
-	
+		return false;
+	}
 
 }
