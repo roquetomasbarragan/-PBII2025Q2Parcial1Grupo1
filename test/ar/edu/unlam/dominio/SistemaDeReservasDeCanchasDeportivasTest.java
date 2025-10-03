@@ -26,7 +26,7 @@ public class SistemaDeReservasDeCanchasDeportivasTest {
 	}
 
 	@Test
-	public void dadoQueExisteUnGestorDeReservasYUnaCanchaElClientePuedeReservarlaElMetodoDevuelveTrue() {
+	public void dadoQueExisteUnGestorDeReservasDeCanchasYUnaCanchaElClientePuedeReservarlaElMetodoDevuelveTrue() {
 		GestorDeReserva gestor = new GestorDeReserva();
 
 		Integer cantMaxPersonas = 10;
@@ -81,6 +81,8 @@ public class SistemaDeReservasDeCanchasDeportivasTest {
 		assertFalse(seAgregoReserva2);
 	
 	}
+	
+	
 	
 	
 }
