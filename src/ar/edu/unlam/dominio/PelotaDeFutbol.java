@@ -5,7 +5,7 @@ public class PelotaDeFutbol implements ItemAdicional {
 	private final Double precioPelota = 5000.00;
 	
 	@Override
-	public Double calcularCosto() {
+	public Double calcularCosto(Cancha cancha) {
 		return this.precioPelota;
 	}
 

@@ -97,7 +97,7 @@ public class SistemaDeReservasDeCanchasDeportivasTest {
 		ItemAdicional pelotaDeFutbol = new PelotaDeFutbol();
 		
 		
-		Boolean seAgregoElItem = reserva.agregarItemAdicional(pelotaDeFutbol, cancha);
+		Boolean seAgregoElItem = reserva.agregarItemAdicional(pelotaDeFutbol);
 		Integer cantidadEsperada = 1;
 		Integer cantidadObtenida = reserva.getCantidadItems();
 		assertTrue(seAgregoElItem);
@@ -128,7 +128,7 @@ public class SistemaDeReservasDeCanchasDeportivasTest {
 		ItemAdicional pelotaDeFutbol = new PelotaDeFutbol();
 		
 		
-		Boolean seAgregoElItem = reserva.agregarItemAdicional(pelotaDeFutbol, cancha);
+		Boolean seAgregoElItem = reserva.agregarItemAdicional(pelotaDeFutbol);
 		Integer cantidadEsperada = 0;
 		Integer cantidadObtenida = reserva.getCantidadItems();
 		
@@ -159,9 +159,39 @@ public class SistemaDeReservasDeCanchasDeportivasTest {
 		
 		ItemAdicional raquetaDeTenis = new RaquetaDeTenis();
 		
-		Boolean seAgregoElItem = reserva.agregarItemAdicional(raquetaDeTenis , cancha);
+		Boolean seAgregoElItem = reserva.agregarItemAdicional(raquetaDeTenis);
 		
 		assertTrue(seAgregoElItem);
+	}
+	
+	@Test 
+	public void dadoQueExisteUnaCanchaDeTenisYUnaReservaElClientePuedeAgregarRaquetasDeTenisQueSeSumaEnElPrecioFinal() {
+		
+		
+		GestorDeReserva gestor = new GestorDeReserva();
+		
+		Double precioBasePorHora = 20000.00;
+		
+		Cancha cancha = new CanchaDeTenis(precioBasePorHora);
+		gestor.agregarCancha(cancha);
+		
+		LocalDateTime horaInicio = LocalDateTime.of(2025, 10, 01, 20, 00);
+		
+		String nombre = "Juan";
+		Integer dni = 123;
+		Cliente clienteTitular = new Cliente(nombre, dni);
+		ReservaBase reserva = new ReservaBase(clienteTitular, cancha, horaInicio);
+		gestor.agregarReserva(reserva);
+		
+		
+		ItemAdicional raquetaDeTenis = new RaquetaDeTenis();
+		
+		reserva.agregarItemAdicional(raquetaDeTenis);
+		
+		Double precioFinalEsperado = 48000.00;
+		Double precioFinalObtenido = reserva.calcularPrecioFinal();
+		
+		assertEquals(precioFinalEsperado, precioFinalObtenido);
 	}
 	
 	@Test 
@@ -214,7 +244,7 @@ public class SistemaDeReservasDeCanchasDeportivasTest {
 		gestor.agregarReserva(reserva);
 		
 		ItemAdicional pelota = new PelotaDeFutbol();
-		reserva.agregarItemAdicional(pelota , cancha);
+		reserva.agregarItemAdicional(pelota);
 		
 		Integer IdDeReserva = reserva.getIdReserva();
 		

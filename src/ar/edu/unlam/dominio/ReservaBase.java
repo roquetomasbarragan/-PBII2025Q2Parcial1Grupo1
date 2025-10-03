@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class ReservaBase {
+public class ReservaBase implements Tarifable{
 
 	private Cliente clienteTitular;
 	private Cancha cancha;
@@ -72,9 +72,9 @@ public class ReservaBase {
 	}
 
 
-	public Boolean agregarItemAdicional(ItemAdicional item, Cancha cancha) {
+	public Boolean agregarItemAdicional(ItemAdicional item) {
 
-		if (item.esCompatibleConLaCancha(cancha)) {
+		if (item.esCompatibleConLaCancha(this.cancha)) {
 			return this.items.add(item);
 		}
 		return false;
@@ -88,6 +88,18 @@ public class ReservaBase {
 	public List<ItemAdicional> getItems() {
 		return items;
 	}
+
+	
+	@Override
+	public Double calcularPrecioFinal() {
+		Double precioFinal = 0.0;
+		for (ItemAdicional item : this.items) {
+			precioFinal += item.calcularCosto(this.cancha);
+		}
+		precioFinal += this.cancha.getPrecioBasePorHora();
+		return precioFinal;
+	}
+	
 
 
 }

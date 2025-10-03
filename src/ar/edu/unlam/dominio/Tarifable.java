@@ -1,6 +1,6 @@
 package ar.edu.unlam.dominio;
 
 public interface Tarifable {
-	Double calcularPrecioFinal(ReservaBase reserva);
+	Double calcularPrecioFinal();
 
 }

@@ -4,8 +4,8 @@ public class RaquetaDeTenis implements ItemAdicional {
 	private Double costo = 7000.0;
 
 	@Override
-	public Double calcularCosto() {
-		return this.costo;
+	public Double calcularCosto(Cancha cancha) {
+		return this.costo * cancha.getCapacidadMax();
 	}
 
 	@Override

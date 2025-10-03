@@ -3,7 +3,7 @@ package ar.edu.unlam.dominio;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 
-public class GestorDeReserva implements Tarifable {
+public class GestorDeReserva {
 
 	private HashSet<Cancha> canchas;
 	private HashSet<ReservaBase> reservas;
@@ -56,19 +56,11 @@ public class GestorDeReserva implements Tarifable {
 		return reservaExistenteEmpiezaCuandoTerminaNuevaReserva && reservaExistenteTerminaCuandoEmpiezaNuevaReserva;
 	}
 
-	@Override
-	public Double calcularPrecioFinal(ReservaBase reserva) {
-		Double precioFinal = 0.0;
-		for (ItemAdicional item : reserva.getItems()) {
-			precioFinal += item.calcularCosto();
-		}
-		precioFinal += reserva.getCancha().getPrecioBasePorHora();
-		return precioFinal;
-	}
+	
 
 	public Double finalizarReserva(Integer IdDeReserva) {
 		ReservaBase reservaAFinalizar = obtenerReservaPorId(IdDeReserva);
-		return calcularPrecioFinal(reservaAFinalizar);
+		return reservaAFinalizar.calcularPrecioFinal();
 	}
 
 	public ReservaBase obtenerReservaPorId(Integer idABuscar) {
