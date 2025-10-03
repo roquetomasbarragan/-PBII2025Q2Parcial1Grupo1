@@ -1,9 +1,11 @@
 package ar.edu.unlam.dominio;
 
 public interface ItemAdicional {
-
-	public Double calcularCosto();
 	
-	public Boolean esCompatibleConLaCancha(Cancha cancha);
+	public abstract Double calcularCosto();
+	
+	public abstract Boolean esCompatibleConLaCancha(Cancha cancha);
+
+
 	
 }

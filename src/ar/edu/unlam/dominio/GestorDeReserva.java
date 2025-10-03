@@ -3,12 +3,12 @@ package ar.edu.unlam.dominio;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 
-public class GestorDeReserva {
+public class GestorDeReserva implements Tarifable {
 
 	private HashSet<Cancha> canchas;
 	private HashSet<ReservaBase> reservas;
-	private static Integer proximoIdCancha = 0;
-	private static Integer proximoIdReserva = 0;
+	private static Integer proximoIdCancha = 1;
+	private static Integer proximoIdReserva = 1;
 
 	public GestorDeReserva() {
 		this.canchas = new HashSet<>();
@@ -17,17 +17,17 @@ public class GestorDeReserva {
 
 	public Boolean agregarCancha(Cancha cancha) {
 		cancha.setIdCancha(proximoIdCancha);
-		proximoIdCancha ++;
+		proximoIdCancha++;
 		return this.canchas.add(cancha);
 	}
 
 	public Boolean agregarReserva(ReservaBase nuevaReserva) {
 		if (!hayHorarioSuperpuesto(nuevaReserva)) {
 			nuevaReserva.setIdReserva(proximoIdReserva);
-			proximoIdReserva ++;
+			proximoIdReserva++;
 			return reservas.add(nuevaReserva);
 		}
-		return false; 
+		return false;
 	}
 
 	private Boolean hayHorarioSuperpuesto(ReservaBase nuevaReserva) {
@@ -54,6 +54,31 @@ public class GestorDeReserva {
 		Boolean reservaExistenteTerminaCuandoEmpiezaNuevaReserva = finalReservaExistente.isAfter(inicioNuevaReserva);
 
 		return reservaExistenteEmpiezaCuandoTerminaNuevaReserva && reservaExistenteTerminaCuandoEmpiezaNuevaReserva;
+	}
+
+	@Override
+	public Double calcularPrecioFinal(ReservaBase reserva) {
+		Double precioFinal = 0.0;
+		for (ItemAdicional item : reserva.getItems()) {
+			precioFinal += item.calcularCosto();
+		}
+		precioFinal += reserva.getCancha().getPrecioBasePorHora();
+		return precioFinal;
+	}
+
+	public Double finalizarReserva(Integer IdDeReserva) {
+		ReservaBase reservaAFinalizar = obtenerReservaPorId(IdDeReserva);
+		return calcularPrecioFinal(reservaAFinalizar);
+	}
+
+	public ReservaBase obtenerReservaPorId(Integer idABuscar) {
+		ReservaBase reservaEncontrada = null;
+		for (ReservaBase reserva : this.reservas) {
+			if (reserva.getIdReserva().equals(idABuscar)) {
+				reservaEncontrada = reserva;
+			}
+		}
+		return reservaEncontrada;
 	}
 
 }

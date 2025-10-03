@@ -1,6 +1,6 @@
 package ar.edu.unlam.dominio;
 
-public class CanchaDeFutbol5 extends Cancha {
+public class CanchaDeFutbol5 extends CanchaDeFutbol {
 
 	private final Integer capacidadMax = 10;
 	
