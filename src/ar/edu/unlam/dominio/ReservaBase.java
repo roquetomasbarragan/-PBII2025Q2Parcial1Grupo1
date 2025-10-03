@@ -10,21 +10,20 @@ public class ReservaBase{
 	private Cancha cancha;
 	private LocalDateTime horaInicio;
 	private LocalDateTime horaFinal;
-	private Integer id;
+	private Integer idReserva;
 
-	public ReservaBase(Cliente clienteTitular, Cancha cancha, LocalDateTime horaInicio, LocalDateTime horaFinal, Integer id) {
+	public ReservaBase(Cliente clienteTitular, Cancha cancha, LocalDateTime horaInicio, LocalDateTime horaFinal) {
 		this.clienteTitular = clienteTitular;
 		this.cancha = cancha;
 		this.horaInicio = horaInicio;
-		this.horaFinal = horaFinal;
-		this.id = id;
+		this.horaFinal = horaInicio.plusHours(1);
 	}
 
 	
 	
 	@Override
 	public int hashCode() {
-		return Objects.hash(id);
+		return Objects.hash(idReserva);
 	}
 
 
@@ -38,7 +37,7 @@ public class ReservaBase{
 		if (getClass() != obj.getClass())
 			return false;
 		ReservaBase other = (ReservaBase) obj;
-		return Objects.equals(id, other.id);
+		return Objects.equals(idReserva, other.idReserva);
 	}
 
 
@@ -69,8 +68,12 @@ public class ReservaBase{
 	}
 
 	
-	public Integer getId() {
-		return id;
+	public Integer getIdReserva() {
+		return idReserva;
+	}
+
+	public void setIdReserva(Integer id) {
+		this.idReserva = id;
 	}
 
 
