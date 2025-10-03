@@ -1,8 +1,8 @@
 package ar.edu.unlam.dominio;
 
-public class CanchaDeFutbol5 extends Cancha {
+public class CanchaDeFutbol5 extends CanchaDeFutbol {
 
-	private static final Integer CapacidadMax = 10;
+	private final Integer CAPACIDAD_MAX = 10;
 	
 	public CanchaDeFutbol5( Double precioBase, Integer idCancha) {
 		super( precioBase, idCancha);
@@ -11,7 +11,7 @@ public class CanchaDeFutbol5 extends Cancha {
 
 	@Override
 	public Integer getCapacidadMax() {
-		return this.CapacidadMax;
+		return this.CAPACIDAD_MAX;
 	}
 	
 }

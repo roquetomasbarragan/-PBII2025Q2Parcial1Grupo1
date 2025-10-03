@@ -82,7 +82,65 @@ public class SistemaDeReservasDeCanchasDeportivasTest {
 	
 	}
 	
+	@Test 
+	public void dadoQueExisteUnaCanchaDeFutbol5YUnaReservaSePuedeAgregarUnaPelotaDeFutbolSiLaCanchaAReservarEsDeFutbol() {
+		
+		
+		GestorDeReserva gestor = new GestorDeReserva();
+
+		Double precioBasePorHora = 20000.00;
+
+		Cancha cancha = new CanchaDeFutbol5(precioBasePorHora, 1);
+		gestor.agregarCancha(cancha);
+		
+		LocalDateTime horaInicio = LocalDateTime.of(2025, 10, 01, 20, 00);
+		LocalDateTime horaFinal = LocalDateTime.of(2025, 10, 01, 21, 00);
+		
+		String nombre = "Juan";
+		Integer dni = 123;
+		Cliente clienteTitular = new Cliente(nombre, dni);
+		Integer id = 1;
+		ReservaBase reserva = new ReservaBase(clienteTitular, cancha, horaInicio, horaFinal, id);
+		gestor.agregarReserva(reserva);
+		
+		
+		ItemAdicional pelotaDeFutbol = new PelotaDeFutbol();
+		
+		
+		Boolean seAgregoElItem = reserva.agregarItemAdicional(pelotaDeFutbol, cancha);
+		
+		assertTrue(seAgregoElItem);
+	}
 	
+	@Test 
+	public void dadoQueExisteUnaCanchaDeTenisYUnaReservaNOSePuedeAgregarUnaPelotaDeFutbolSiLaCanchaAReservarNoEsDeFutbol() {
+		
+		
+		GestorDeReserva gestor = new GestorDeReserva();
+
+		Double precioBasePorHora = 20000.00;
+
+		Cancha cancha = new CanchaDeTenis(precioBasePorHora, 1);
+		gestor.agregarCancha(cancha);
+		
+		LocalDateTime horaInicio = LocalDateTime.of(2025, 10, 01, 20, 00);
+		LocalDateTime horaFinal = LocalDateTime.of(2025, 10, 01, 21, 00);
+		
+		String nombre = "Juan";
+		Integer dni = 123;
+		Cliente clienteTitular = new Cliente(nombre, dni);
+		Integer id = 1;
+		ReservaBase reserva = new ReservaBase(clienteTitular, cancha, horaInicio, horaFinal, id);
+		gestor.agregarReserva(reserva);
+		
+		
+		ItemAdicional pelotaDeFutbol = new PelotaDeFutbol();
+		
+		
+		Boolean seAgregoElItem = reserva.agregarItemAdicional(pelotaDeFutbol , cancha);
+		
+		assertFalse(seAgregoElItem);
+	}
 	
 	
 }
