@@ -1,5 +1,6 @@
 package ar.edu.unlam.dominio;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -107,9 +108,12 @@ public class SistemaDeReservasDeCanchasDeportivasTest {
 		ItemAdicional pelotaDeFutbol = new PelotaDeFutbol();
 		
 		
-		Boolean seAgregoElItem = reserva.agregarItemAdicional(pelotaDeFutbol, cancha);
-		
+		Boolean seAgregoElItem = reserva.agregarItemAdicional(pelotaDeFutbol);
+		Integer cantidadEsperada = 1;
+		Integer cantidadObtenida = reserva.getCantidadItems();
 		assertTrue(seAgregoElItem);
+		assertEquals(cantidadEsperada, cantidadObtenida);
+		
 	}
 	
 	@Test 
@@ -137,9 +141,13 @@ public class SistemaDeReservasDeCanchasDeportivasTest {
 		ItemAdicional pelotaDeFutbol = new PelotaDeFutbol();
 		
 		
-		Boolean seAgregoElItem = reserva.agregarItemAdicional(pelotaDeFutbol , cancha);
+		Boolean seAgregoElItem = reserva.agregarItemAdicional(pelotaDeFutbol);
+		Integer cantidadEsperada = 0;
+		Integer cantidadObtenida = reserva.getCantidadItems();
 		
 		assertFalse(seAgregoElItem);
+		assertEquals(cantidadEsperada, cantidadObtenida);
+		
 	}
 	
 	

@@ -70,13 +70,20 @@ public class ReservaBase {
 		return id;
 	}
 
-	public Boolean agregarItemAdicional(ItemAdicional item, Cancha cancha) {
+	public Boolean agregarItemAdicional(ItemAdicional item) {
 
-		if (item.esCompatibleConLaCancha(cancha)) {
+		if (item.esCompatibleConLaCancha(this.cancha)) {
 			return this.items.add(item);
 		}
 
 		return false;
 	}
+
+	public Integer getCantidadItems() {
+		
+		return this.items.size();
+	}
+	
+	
 
 }
