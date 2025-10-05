@@ -45,6 +45,7 @@ public class SistemaDeReservasDeCanchasDeportivasTest {
 		assertTrue(seAgregoReserva);
 	}
 	
+	
 	@Test 
 	public void dadoQueExisteUnaCanchaReservadaNoSePuedeReservarLaMismaEnElMismoHorarioElMetodoDevuelveFalse() {
 		
@@ -73,6 +74,31 @@ public class SistemaDeReservasDeCanchasDeportivasTest {
 		assertFalse(seAgregoReserva2);
 	
 	}
+	
+	public void dadoQueExisteUnaCanchaReservadaElClientePuedeCancelarSuReserva() {
+		
+		
+		GestorDeReserva gestor = new GestorDeReserva();
+		
+		Double precioBasePorHora = 20000.00;
+		
+		Cancha cancha = new CanchaDeFutbol5(precioBasePorHora);
+		gestor.agregarCancha(cancha);
+		
+		LocalDateTime horaInicio = LocalDateTime.of(2025, 10, 01, 20, 00);
+		
+		String nombre = "Juan";
+		Integer dni = 123;
+		Cliente clienteTitular = new Cliente(nombre, dni);
+		ReservaBase reserva = new ReservaBase(clienteTitular, cancha, horaInicio);
+		gestor.agregarReserva(reserva);
+		
+		Boolean seCanceloLaReserva = gestor.cancelarReserva(reserva);
+		assertTrue(seCanceloLaReserva);
+		
+	}
+	
+	
 	
 	@Test 
 	public void dadoQueExisteUnaCanchaDeFutbol5YUnaReservaSePuedeAgregarUnaPelotaDeFutbolSiLaCanchaAReservarEsDeFutbol() {
@@ -224,6 +250,39 @@ public class SistemaDeReservasDeCanchasDeportivasTest {
 		ReservaBase reservaEncontrada = gestor.obtenerReservaPorId(IdDeReserva);
 		
 		assertEquals(reservaEsperada, reservaEncontrada);
+		
+	}
+	
+	@Test
+	public void dadoQueExisteUnaReservaDeCanchasElClientePuedeCancelarlaSabiendoSuIdDeReserva() {
+		GestorDeReserva gestor = new GestorDeReserva();
+		
+		Double precioBasePorHora = 20000.00;
+		
+		Cancha cancha = new CanchaDeFutbol5(precioBasePorHora);
+		gestor.agregarCancha(cancha);
+		
+		LocalDateTime horaInicio = LocalDateTime.of(2025, 10, 01, 20, 00);
+		
+		Cliente clienteTitular = new Cliente("Juan", 123);
+		ReservaBase reservaDeJuan = new ReservaBase(clienteTitular, cancha, horaInicio);
+		gestor.agregarReserva(reservaDeJuan);
+		
+		gestor.agregarReserva(reservaDeJuan);
+		
+		Cliente clienteTitular2 = new Cliente("Pedro", 235);
+		LocalDateTime horaInicio2 = LocalDateTime.of(2025, 10, 01, 23, 00);
+		ReservaBase reservaDePedro = new ReservaBase(clienteTitular2, cancha, horaInicio2);
+		
+		gestor.agregarReserva(reservaDePedro);
+		
+		
+		//Juan desea cancelar su reserva
+		Integer idReserva = reservaDeJuan.getIdReserva();
+		
+		Boolean seCanceloReserva = gestor.cancelarReservaPorId(idReserva);
+		
+		assertTrue(seCanceloReserva);
 		
 	}
 	

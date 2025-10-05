@@ -73,4 +73,13 @@ public class GestorDeReserva {
 		return reservaEncontrada;
 	}
 
+	public Boolean cancelarReserva(ReservaBase reserva) {
+		return this.reservas.remove(reserva);
+	}
+	
+	public Boolean cancelarReservaPorId(Integer idReserva) {
+		ReservaBase reservaACancelar = obtenerReservaPorId(idReserva);
+		return cancelarReserva(reservaACancelar);
+	}
+
 }
