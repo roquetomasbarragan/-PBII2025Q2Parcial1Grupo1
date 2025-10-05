@@ -1,12 +1,16 @@
 package ar.edu.unlam.dominio;
 
-public class PelotaDeFutbol implements ItemAdicional {
+public class PelotaDeFutbol extends ItemAdicional {
 
-	private final Double precioPelota = 5000.00;
 	
+	public PelotaDeFutbol() {
+		super();
+		setCosto(5000.00);
+	}
+
 	@Override
 	public Double calcularCosto(Cancha cancha) {
-		return this.precioPelota;
+		return getCosto();
 	}
 
 	@Override
@@ -16,5 +20,6 @@ public class PelotaDeFutbol implements ItemAdicional {
 		}
 		return false;
 	}
+
 
 }
