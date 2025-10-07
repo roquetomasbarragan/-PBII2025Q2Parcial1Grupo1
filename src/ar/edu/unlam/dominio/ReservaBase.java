@@ -71,6 +71,10 @@ public class ReservaBase implements Tarifable{
 		this.idReserva = id;
 	}
 
+	public Boolean estaActiva(LocalDateTime momento) {
+		return !momento.isBefore(this.horaInicio) && !momento.isAfter(this.horaFinal);
+	}
+
 
 	public Boolean agregarItemAdicional(ItemAdicional item) {
 

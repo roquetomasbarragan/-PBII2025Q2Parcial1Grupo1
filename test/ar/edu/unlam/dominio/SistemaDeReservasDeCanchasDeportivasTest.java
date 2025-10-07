@@ -23,6 +23,27 @@ public class SistemaDeReservasDeCanchasDeportivasTest {
 
 		assertTrue(seAgrego);
 	}
+	
+	@Test
+	public void dadoQueExistenMuchasCanchasPuedoObtenerLaQueQuieroSabiendoSoloSuId(){
+		GestorDeReserva gestor = new GestorDeReserva();
+
+		Double precioBasePorHora = 20000.00;
+
+		Cancha canchaDeFutbol = new CanchaDeFutbol5(precioBasePorHora);
+		Cancha canchaDeFutbol2 = new CanchaDeFutbol5(precioBasePorHora);
+		Cancha canchaDeFutbol3 = new CanchaDeFutbol5(precioBasePorHora);
+		
+		gestor.agregarCancha(canchaDeFutbol);
+		gestor.agregarCancha(canchaDeFutbol2);
+		gestor.agregarCancha(canchaDeFutbol3);
+		
+		//Quiero obtener la cancha 2
+		
+		Integer idDeCanchaABuscar = canchaDeFutbol2.getIdCancha();
+		Cancha canchaEncontrada = gestor.obtenerCanchaPorId(idDeCanchaABuscar);
+		assertEquals(canchaDeFutbol2, canchaEncontrada);
+	}
 
 	@Test
 	public void dadoQueExisteUnGestorDeReservasDeCanchasYUnaCanchaElClientePuedeReservarlaElMetodoDevuelveTrue() {

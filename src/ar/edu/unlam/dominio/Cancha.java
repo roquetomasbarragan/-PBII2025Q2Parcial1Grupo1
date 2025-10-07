@@ -43,6 +43,11 @@ public abstract class Cancha {
 		return idCancha;
 	}
 
+	@Override
+	public String toString() {
+		return "Cancha [precioBasePorHora=" + precioBasePorHora + ", idCancha=" + idCancha + "]";
+	}
+
 	
 
 	
