@@ -2,6 +2,7 @@ package ar.edu.unlam.interfaz;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.HashSet;
 import java.util.Scanner;
 
 import ar.edu.unlam.dominio.*;
@@ -50,11 +51,8 @@ public class SistemaDeReservasDeCanchas {
 	}
 
 	private static void agregarCancha(GestorDeReserva gestor) {
-		mostrarMensaje("\n--- Agregar Cancha ---\n"
-				+ "1. Cancha de Fútbol 5\n"
-				+ "2. Cancha de Fútbol 8\n"
-				+ "3. Cancha de Fútbol 11\n"
-				+ "4. Cancha de Tenis");
+		mostrarMensaje("\n--- Agregar Cancha ---\n" + "1. Cancha de Fútbol 5\n" + "2. Cancha de Fútbol 8\n"
+				+ "3. Cancha de Fútbol 11\n" + "4. Cancha de Tenis");
 
 		Integer opcion = ingresarEntero("Seleccione el tipo de cancha: ");
 		Double precioCancha = ingresarDouble("Ingrese el precio base por hora");
@@ -92,34 +90,44 @@ public class SistemaDeReservasDeCanchas {
 	}
 
 	private static void agregarReserva(GestorDeReserva gestor) {
-		
-		mostrarMensaje("\n--- Reservar Cancha ---");
 
-		Cancha cancha = validarIdDeCancha(gestor);
-
-		Cliente cliente = crearCliente();
-		LocalDateTime horaDeInicio = asignarHoraDeReserva();
-
-		ReservaBase nuevaReserva = new ReservaBase(cliente, cancha, horaDeInicio);
-		
-		gestor.agregarReserva(nuevaReserva);
+		if(verificaSiExistenCanchasParaReservar(gestor)) {			
+			mostrarMensaje("\n--- Reservar Cancha ---");
+			
+			LocalDateTime horaDeInicio = asignarHoraDeReserva(gestor);
+			
+			Cancha cancha = validarIdDeCancha(gestor);
+			Cliente cliente = crearCliente();
+			
+			ReservaBase nuevaReserva = new ReservaBase(cliente, cancha, horaDeInicio);
+			
+			gestor.agregarReserva(nuevaReserva);
+		} else {
+			mostrarMensaje("Error. Aún no existen canchas para reservar");
+		}
+	}
+	
+	public static Boolean verificaSiExistenCanchasParaReservar(GestorDeReserva gestor) {
+		Boolean existenCanchas = false;
+		if(gestor.getCanchas().size() > 0) {
+			existenCanchas = true;
+		}
+		return existenCanchas;
 	}
 
 	public static Cancha validarIdDeCancha(GestorDeReserva gestor) {
-		
+
 		Boolean idInvalido;
 		Cancha cancha;
-		
-		do {			
+
+		do {
 			Integer idCancha = ingresarEntero("Ingrese el ID de la cancha: ");
 			cancha = gestor.obtenerCanchaPorId(idCancha);
-			
 			idInvalido = (cancha == null);
-			
-			if(idInvalido) {
+			if (idInvalido) {
 				mostrarMensaje("No hay ninguna cancha disponible con ese ID, intentelo nuevamente");
 			}
-			
+
 		} while (idInvalido);
 		return cancha;
 	}
@@ -131,10 +139,11 @@ public class SistemaDeReservasDeCanchas {
 		return cliente;
 	}
 
-	public static LocalDateTime asignarHoraDeReserva() {
+	public static LocalDateTime asignarHoraDeReserva(GestorDeReserva gestor) {
 
 		LocalDateTime horaDeInicio;
 		Boolean esValida;
+		Boolean hayCanchasDisponibles;
 
 		do {
 			mostrarMensaje("Ingrese la fecha y hora de inicio:");
@@ -145,13 +154,18 @@ public class SistemaDeReservasDeCanchas {
 
 			horaDeInicio = LocalDateTime.of(2025, mes, dia, hora, minuto);
 			esValida = validarHoraDeInicio(horaDeInicio);
-
+			hayCanchasDisponibles = (gestor.obtenerCanchasDisponibles(horaDeInicio).size() == 0);
+			 
 			if (!esValida) {
 				mostrarMensaje("Hubo un error, intentelo de nuevo\n");
 			}
+			if (!hayCanchasDisponibles) {
+				mostrarMensaje("No hay canchas disponibles en ese horario, intentelo de nuevo\n");
+			}
 
-		} while (!esValida);
-
+		} while (!esValida || !hayCanchasDisponibles);
+		
+		mostrarCanchasDisponibles(gestor.obtenerCanchasDisponibles(horaDeInicio));
 		return horaDeInicio;
 	}
 
@@ -328,6 +342,14 @@ public class SistemaDeReservasDeCanchas {
 		} while (opcion < 1 || opcion > Menu.values().length);
 
 		return Menu.values()[opcion - 1];
+	}
+
+	public static void mostrarCanchasDisponibles(HashSet<Cancha> canchas) {
+
+			for (Cancha cancha : canchas) {
+				mostrarMensaje(cancha.toString());
+			
+		}
 	}
 
 	public static void mostrarMensaje(String mensaje) {

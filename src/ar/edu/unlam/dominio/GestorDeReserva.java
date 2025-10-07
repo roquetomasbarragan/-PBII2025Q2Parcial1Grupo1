@@ -56,8 +56,6 @@ public class GestorDeReserva {
 		return reservaExistenteEmpiezaCuandoTerminaNuevaReserva && reservaExistenteTerminaCuandoEmpiezaNuevaReserva;
 	}
 
-	
-
 	public Double finalizarReserva(Integer IdDeReserva) {
 		ReservaBase reservaAFinalizar = obtenerReservaPorId(IdDeReserva);
 		return reservaAFinalizar.calcularPrecioFinal();
@@ -76,7 +74,7 @@ public class GestorDeReserva {
 	public Boolean cancelarReserva(ReservaBase reserva) {
 		return this.reservas.remove(reserva);
 	}
-	
+
 	public Boolean cancelarReservaPorId(Integer idReserva) {
 		ReservaBase reservaACancelar = obtenerReservaPorId(idReserva);
 		return cancelarReserva(reservaACancelar);
@@ -92,4 +90,27 @@ public class GestorDeReserva {
 		return canchaEncontrada;
 	}
 
+	public HashSet<Cancha> getCanchas() {
+		return canchas;
+	}
+
+	public HashSet<Cancha> obtenerCanchasReservadas(LocalDateTime horaDeInicio) {
+		HashSet<Cancha> hashSetTemporalDeCanchasReservadas = new HashSet<>();
+
+			for (ReservaBase reserva : reservas) {
+				if (reserva.estaActiva(horaDeInicio)) {
+					hashSetTemporalDeCanchasReservadas.add(reserva.getCancha());
+				}
+			}
+		
+		return hashSetTemporalDeCanchasReservadas;
+	}
+	
+	public HashSet<Cancha> obtenerCanchasDisponibles(LocalDateTime horaDeInicio) {
+		HashSet<Cancha> hashSetTemporalDeCanchasDisponibles = new HashSet<>();
+		hashSetTemporalDeCanchasDisponibles = this.canchas;
+		hashSetTemporalDeCanchasDisponibles.removeAll(obtenerCanchasReservadas(horaDeInicio));
+		
+		return hashSetTemporalDeCanchasDisponibles;
+	}
 }
