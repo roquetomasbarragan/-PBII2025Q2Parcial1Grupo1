@@ -82,4 +82,14 @@ public class GestorDeReserva {
 		return cancelarReserva(reservaACancelar);
 	}
 
+	public Cancha obtenerCanchaPorId(Integer idCancha) {
+		Cancha canchaEncontrada = null;
+		for (Cancha cancha : this.canchas) {
+			if (cancha.getIdCancha().equals(idCancha)) {
+				canchaEncontrada = cancha;
+			}
+		}
+		return canchaEncontrada;
+	}
+
 }
