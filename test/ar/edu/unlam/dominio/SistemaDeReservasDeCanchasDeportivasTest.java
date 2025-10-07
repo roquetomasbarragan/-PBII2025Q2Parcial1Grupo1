@@ -311,7 +311,21 @@ public class SistemaDeReservasDeCanchasDeportivasTest {
 		Double valorEsperado = 25000D;
 		
 		assertEquals(valorEsperado, valorObtenido);
+	}
 		
+		@Test
+		public void dadoQueExisteUnGestorDeReservaDeCanchasSePuedeCrearUnaCanchaExitosamenteElMetodoDevuelveTrue() {
+			GestorDeReserva gestor = new GestorDeReserva();
+			
+			Double precioBasePorHora = 2800.00;
+			
+			Cancha canchaDeFutbol = new CanchaDeFutbol7(precioBasePorHora);
+			
+			Boolean seAgrego = gestor.agregarCancha(canchaDeFutbol);
+			
+			assertTrue(seAgrego);
+		}
+			
 		
 	}
 	
@@ -321,4 +335,4 @@ public class SistemaDeReservasDeCanchasDeportivasTest {
 	
 	
 	
-}
+
