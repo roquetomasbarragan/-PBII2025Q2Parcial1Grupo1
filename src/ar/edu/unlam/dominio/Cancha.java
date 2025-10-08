@@ -21,6 +21,7 @@ public abstract class Cancha {
 	public void setIdCancha(Integer idCancha) {
 		this.idCancha = idCancha;
 	}
+	
 
 	@Override
 	public int hashCode() {
@@ -41,6 +42,11 @@ public abstract class Cancha {
 
 	public Integer getIdCancha() {
 		return idCancha;
+	}
+
+	@Override
+	public String toString() {
+		return "Cancha [precioBasePorHora=" + precioBasePorHora + ", idCancha=" + idCancha + "]";
 	}
 
 	

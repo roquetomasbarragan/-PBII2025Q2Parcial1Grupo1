@@ -23,6 +23,27 @@ public class SistemaDeReservasDeCanchasDeportivasTest {
 
 		assertTrue(seAgrego);
 	}
+	
+	@Test
+	public void dadoQueExistenMuchasCanchasPuedoObtenerLaQueQuieroSabiendoSoloSuId(){
+		GestorDeReserva gestor = new GestorDeReserva();
+
+		Double precioBasePorHora = 20000.00;
+
+		Cancha canchaDeFutbol = new CanchaDeFutbol5(precioBasePorHora);
+		Cancha canchaDeFutbol2 = new CanchaDeFutbol5(precioBasePorHora);
+		Cancha canchaDeFutbol3 = new CanchaDeFutbol5(precioBasePorHora);
+		
+		gestor.agregarCancha(canchaDeFutbol);
+		gestor.agregarCancha(canchaDeFutbol2);
+		gestor.agregarCancha(canchaDeFutbol3);
+		
+		//Quiero obtener la cancha 2
+		
+		Integer idDeCanchaABuscar = canchaDeFutbol2.getIdCancha();
+		Cancha canchaEncontrada = gestor.obtenerCanchaPorId(idDeCanchaABuscar);
+		assertEquals(canchaDeFutbol2, canchaEncontrada);
+	}
 
 	@Test
 	public void dadoQueExisteUnGestorDeReservasDeCanchasYUnaCanchaElClientePuedeReservarlaElMetodoDevuelveTrue() {
@@ -311,51 +332,126 @@ public class SistemaDeReservasDeCanchasDeportivasTest {
 		Double valorEsperado = 25000D;
 		
 		assertEquals(valorEsperado, valorObtenido);
-	}
 		
+		
+	}
+	
+	@Test
+	public void dadoQueExisteUnGestorDeReservaDeCanchasDe7SePuedeCrearUnaCanchaExitosamenteElMetodoDevuelveTrue() {
+		GestorDeReserva gestor = new GestorDeReserva();
+		
+		Double precioBasePorHora = 28000.00;
+		
+		Cancha canchaDeFutbol = new CanchaDeFutbol7(precioBasePorHora);
+		
+		Boolean seAgrego = gestor.agregarCancha(canchaDeFutbol);
+		
+		assertTrue(seAgrego);
+	}
 		@Test
-		public void dadoQueExisteUnGestorDeReservaDeCanchasSePuedeCrearUnaCanchaExitosamenteElMetodoDevuelveTrue() {
+		public void  dadoQueExisteUnaReservaDeUnClienteJubiladoSeAplicaUnDescuentoDel15PorCientoEnElPrecioFinal() {
+			
 			GestorDeReserva gestor = new GestorDeReserva();
 			
-			Double precioBasePorHora = 2800.00;
+			Double precioBasePorHora = 20000.00;
 			
-			Cancha canchaDeFutbol = new CanchaDeFutbol7(precioBasePorHora);
+			Cancha cancha = new CanchaDeFutbol5(precioBasePorHora);
+			gestor.agregarCancha(cancha);
+			
+			LocalDateTime horaInicio = LocalDateTime.of(2025, 10, 01, 20, 00);
+			
+			Cliente clienteJubilado = new Cliente("Carlos", 789);
+			ReservaBase reserva = new ReservaBase(clienteJubilado, cancha, horaInicio);
+			gestor.agregarReserva(reserva);
+			
+			DescuentoJubilados reservaConDescuento = new DescuentoJubilados(reserva);
+			
+			Double precioEsperado = 17000.00;
+			Double precioObtenido = reservaConDescuento.calcularPrecioFinal();
+			
+			assertEquals(precioEsperado, precioObtenido);
+		}
+		
+		@Test
+		public void dadoQueExisteUnGestorDeReservaDeCanchasDe8SePuedeCrearUnaCanchaExitosamenteElMetodoDevuelveTrue() {
+			GestorDeReserva gestor = new GestorDeReserva();
+			
+			Double precioBasePorHora = 32000.00;
+			
+			Cancha canchaDeFutbol = new CanchaDeFutbol8(precioBasePorHora);
 			
 			Boolean seAgrego = gestor.agregarCancha(canchaDeFutbol);
 			
 			assertTrue(seAgrego);
 		}
-			@Test
-			public void  dadoQueExisteUnaReservaDeUnClienteJubiladoSeAplicaUnDescuentoDel15PorCientoEnElPrecioFinal() {
-				
-				GestorDeReserva gestor = new GestorDeReserva();
-				
-				Double precioBasePorHora = 20000.00;
-				
-				Cancha cancha = new CanchaDeFutbol5(precioBasePorHora);
-				gestor.agregarCancha(cancha);
-				
-				LocalDateTime horaInicio = LocalDateTime.of(2025, 10, 01, 20, 00);
-				
-				Cliente clienteJubilado = new Cliente("Carlos", 789);
-				ReservaBase reserva = new ReservaBase(clienteJubilado, cancha, horaInicio);
-				gestor.agregarReserva(reserva);
-				
-				DescuentoJubilados reservaConDescuento = new DescuentoJubilados(reserva);
-				
-				Double precioEsperado = 17000.00;
-				Double precioObtenido = reservaConDescuento.calcularPrecioFinal();
-				
-				assertEquals(precioEsperado, precioObtenido);
-			}
-				
-				
-				
-				
-				
-				
-				
-			}
+			
+		@Test
+		public void dadoQueExisteUnaReservaDeUnEstudianteSeAplicaUnDescuentoDel10PorCientoEnElPrecioFinal() {
+		    
+			GestorDeReserva gestor = new GestorDeReserva();
+			
+			Double precioBasePorHora = 32000.00;
+			
+			Cancha cancha = new CanchaDeFutbol8(precioBasePorHora);
+			gestor.agregarCancha(cancha);
+			
+			LocalDateTime horaInicio = LocalDateTime.of(2025, 10, 01, 20, 00);
+			
+			Cliente clienteEstudiante = new Cliente("Pablo", 222);
+			ReservaBase reserva = new ReservaBase(clienteEstudiante, cancha, horaInicio);
+			gestor.agregarReserva(reserva);
+			
+			DescuentoJubilados reservaConDescuento = new DescuentoJubilados(reserva);
+			
+			Double precioEsperado = 288000.00;
+			Double precioObtenido = reservaConDescuento.calcularPrecioFinal();
+			
+			assertEquals(precioEsperado, precioObtenido);
+		}
+
+		@Test
+		public void dadoQueExisteUnGestorDeReservaDeCanchasDe11SePuedeCrearUnaCanchaExitosamenteElMetodoDevuelveTrue() {
+		    GestorDeReserva gestor = new GestorDeReserva();
+		    
+		    Double precioBasePorHora = 44000.00;
+		    
+		    Cancha canchaDeFutbol = new CanchaDeFutbol11(precioBasePorHora);
+		    
+		    Boolean seAgrego = gestor.agregarCancha(canchaDeFutbol);
+		    
+		    assertTrue(seAgrego);
+		}
+
+		@Test
+		public void dadoQueExisteUnaReservaDeUnClienteEstudianteSeAplicaUnDescuentoDel10PorCientoEnElPrecioFinal() {
+		    
+			GestorDeReserva gestor = new GestorDeReserva();
+			
+			Double precioBasePorHora = 44000.00;
+			
+			Cancha cancha = new CanchaDeFutbol11(precioBasePorHora);
+			gestor.agregarCancha(cancha);
+			
+			LocalDateTime horaInicio = LocalDateTime.of(2025, 10, 01, 20, 00);
+			
+			Cliente clienteEstudiante = new Cliente("Pablo", 222);
+			ReservaBase reserva = new ReservaBase(clienteEstudiante, cancha, horaInicio);
+			gestor.agregarReserva(reserva);
+			
+			DescuentoJubilados reservaConDescuento = new DescuentoJubilados(reserva);
+			
+			Double precioEsperado = 39600.00;
+			Double precioObtenido = reservaConDescuento.calcularPrecioFinal();
+			
+			assertEquals(precioEsperado, precioObtenido);
+		}
+
+	
+	
+	
+	
+	
+}
 		
 	
 	
