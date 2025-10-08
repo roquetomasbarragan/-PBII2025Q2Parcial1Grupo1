@@ -71,7 +71,6 @@ public class ReservaBase implements Tarifable{
 		this.idReserva = id;
 	}
 
-
 	public Boolean agregarItemAdicional(ItemAdicional item) {
 
 		if (item.esCompatibleConLaCancha(this.cancha)) {
@@ -100,6 +99,13 @@ public class ReservaBase implements Tarifable{
 		return precioFinal;
 	}
 	
+	@Override
+	public String toString() {
+		return "El cliente " + clienteTitular.getNombre() + " reservo la " + cancha.getTipoDeCancha() + ", el dia " + horaInicio.toLocalDate() + " a las " + horaInicio.toLocalTime()
+				+ ". ID DE RESERVA: " + idReserva;
+	}
+
+
 
 
 }

@@ -4,9 +4,9 @@ import java.util.Objects;
 
 public abstract class Cancha {
 
-	
 	private Double precioBasePorHora;
 	private Integer idCancha;
+	protected String tipoDeCancha;
 
 	public Cancha( Double precioBasePorHora) {
 		this.precioBasePorHora = precioBasePorHora;
@@ -43,10 +43,13 @@ public abstract class Cancha {
 		return idCancha;
 	}
 
-	
+	public String getTipoDeCancha() {
+		return tipoDeCancha;
+	}
 
-	
-
-	
+	@Override
+	public String toString() {
+		return this.tipoDeCancha + " por $" + this.precioBasePorHora + "/hora.  ID: " + idCancha;
+	}
 	
 }

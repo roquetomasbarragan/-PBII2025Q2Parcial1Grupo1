@@ -7,6 +7,7 @@ public class CanchaDeTenis extends Cancha {
 	
 	public CanchaDeTenis(Double precioBasePorHora) {
 		super(precioBasePorHora);
+		this.tipoDeCancha = "cancha de tenis"; 
 	}
 
 	@Override

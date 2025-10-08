@@ -1,6 +1,7 @@
 package ar.edu.unlam.dominio;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
 
 public class GestorDeReserva {
@@ -55,11 +56,24 @@ public class GestorDeReserva {
 
 		return reservaExistenteEmpiezaCuandoTerminaNuevaReserva && reservaExistenteTerminaCuandoEmpiezaNuevaReserva;
 	}
-
 	
+	private boolean yaSeReservoLaCanchaEnEseRangoHorarioConLocalDate(ReservaBase reservaExistente, LocalDateTime momentoInicio) {
+		
+		LocalDateTime inicioReservaExistente = reservaExistente.getHoraInicio();
+		LocalDateTime finalReservaExistente = reservaExistente.getHoraFinal();
+		
+		LocalDateTime inicioNuevaReserva = momentoInicio;
+		LocalDateTime finalNuevaReserva = momentoInicio.plusHours(1);
+		
+		Boolean reservaExistenteEmpiezaCuandoTerminaNuevaReserva = inicioReservaExistente.isBefore(finalNuevaReserva);
+		Boolean reservaExistenteTerminaCuandoEmpiezaNuevaReserva = finalReservaExistente.isAfter(inicioNuevaReserva);
+		
+		return reservaExistenteEmpiezaCuandoTerminaNuevaReserva && reservaExistenteTerminaCuandoEmpiezaNuevaReserva;
+	}
 
 	public Double finalizarReserva(Integer IdDeReserva) {
 		ReservaBase reservaAFinalizar = obtenerReservaPorId(IdDeReserva);
+		this.reservas.remove(reservaAFinalizar);
 		return reservaAFinalizar.calcularPrecioFinal();
 	}
 
@@ -76,10 +90,75 @@ public class GestorDeReserva {
 	public Boolean cancelarReserva(ReservaBase reserva) {
 		return this.reservas.remove(reserva);
 	}
-	
 	public Boolean cancelarReservaPorId(Integer idReserva) {
 		ReservaBase reservaACancelar = obtenerReservaPorId(idReserva);
 		return cancelarReserva(reservaACancelar);
 	}
 
+	public Cancha obtenerCanchaPorId(Integer idCancha) {
+		Cancha canchaEncontrada = null;
+		for (Cancha cancha : this.canchas) {
+			if (cancha.getIdCancha().equals(idCancha)) {
+				canchaEncontrada = cancha;
+			}
+		}
+		return canchaEncontrada;
+	}
+
+	public HashSet<Cancha> getCanchas() {
+		return canchas;
+	}
+
+	public HashSet<ReservaBase> getReservas() {
+		return reservas;
+	}
+
+	public HashSet<Cancha> obtenerCanchasReservadasConUnHorarioEspecifico(LocalDateTime horaDeInicio) {
+		HashSet<Cancha> hashSetTemporalDeCanchasReservadas = new HashSet<>();
+
+			for (ReservaBase reserva : reservas) {
+				if (yaSeReservoLaCanchaEnEseRangoHorarioConLocalDate(reserva,horaDeInicio)) {
+					hashSetTemporalDeCanchasReservadas.add(reserva.getCancha());
+				}
+			}
+		
+		return hashSetTemporalDeCanchasReservadas;
+	}
+	
+	public HashSet<ReservaBase> obtenerReservasConUnHorarioEspecifico(LocalDateTime horaDeInicio) {
+		HashSet<ReservaBase> hashSetTemporalDeCanchasReservadas = new HashSet<>();
+		
+		for (ReservaBase reserva : reservas) {
+			if (yaSeReservoLaCanchaEnEseRangoHorarioConLocalDate(reserva,horaDeInicio)) {
+				hashSetTemporalDeCanchasReservadas.add(reserva);
+			}
+			
+		}
+		return hashSetTemporalDeCanchasReservadas;
+	}
+	
+	public HashSet<Cancha> obtenerCanchasDisponibles(LocalDateTime horaDeInicio) {
+		HashSet<Cancha> hashSetTemporalDeCanchasDisponibles = new HashSet<>();
+		ArrayList<Integer> IdDeCanchasReservadas = obtenerCanchasIdDeCanchasReservadas(horaDeInicio);
+		
+		for (Cancha cancha : this.canchas) {
+			 if (!IdDeCanchasReservadas.contains(cancha.getIdCancha())) {
+				 hashSetTemporalDeCanchasDisponibles.add(cancha);
+		        }
+		}
+		
+		return hashSetTemporalDeCanchasDisponibles;
+	}
+	
+	public ArrayList<Integer> obtenerCanchasIdDeCanchasReservadas(LocalDateTime horaDeInicio) {
+		ArrayList<Integer> IdDeCanchasReservadas = new ArrayList<>();
+		
+		for (Cancha cancha : obtenerCanchasReservadasConUnHorarioEspecifico(horaDeInicio)) {
+			IdDeCanchasReservadas.add(cancha.getIdCancha());
+		}
+		
+		return IdDeCanchasReservadas;
+	}
+	
+	
 }
