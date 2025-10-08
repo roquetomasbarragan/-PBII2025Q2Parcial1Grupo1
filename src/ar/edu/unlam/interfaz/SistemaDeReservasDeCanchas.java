@@ -23,7 +23,7 @@ public class SistemaDeReservasDeCanchas {
 		Menu opcionDelMenu = null;
 
 		do {
-			mostrarMensaje("----Sistema De Reservas De Canchas-----");
+			mostrarMensaje("\n----Sistema De Reservas De Canchas-----");
 
 			opcionDelMenu = ingresarOpcionDelMenu();
 
@@ -37,8 +37,9 @@ public class SistemaDeReservasDeCanchas {
 			case AGREGAR_ITEMS_ADICIONALES:
 				agregarItemsAdicionales(gestor);
 				break;
-			case FINALIZAR_RESERVA:
-				finalizarReserva(gestor);
+			case CERRAR_RESERVA_Y_OBTENER_COSTO: 
+				cerrarReservaYobtenerCosto(gestor);
+				break;
 			case VER_RESERVAS_REALIZADAS:
 				verReservasRealizadas(gestor);
 				break;
@@ -63,7 +64,7 @@ public class SistemaDeReservasDeCanchas {
 
 	}
 
-	private static void finalizarReserva(GestorDeReserva gestor) {
+	private static void cerrarReservaYobtenerCosto(GestorDeReserva gestor) {
 		if (verificaSiExistenReservas(gestor)) {			
 			mostrarMensaje("\n--- Finalizar Reserva ---\nReservas realizadas: ");
 			verReservasRealizadas(gestor);
@@ -223,7 +224,7 @@ public class SistemaDeReservasDeCanchas {
 		Boolean hayCanchasDisponibles;
 
 		do {
-			horaDeInicio = fechaYHoraValidada("Ingrese la fecha y hora de inicio:");
+			horaDeInicio = fechaYHoraValidada("\n *Abierto de 8am a 23pm* \n \nIngrese la fecha y hora de inicio: \n*Desde el día de hoy en adelante* ");
 			esValida = validarHoraDeInicio(horaDeInicio);
 			hayCanchasDisponibles = gestor.obtenerCanchasDisponibles(horaDeInicio).size() > 0;
 
@@ -308,7 +309,7 @@ public class SistemaDeReservasDeCanchas {
 		Integer mesElegido;
 
 		do {
-			mesElegido = ingresarEntero("Mes: ");
+			mesElegido = ingresarEntero("\nMes: ");
 			mesValido = mesElegido < 13 && mesElegido > 0;
 
 			if (!mesValido) {

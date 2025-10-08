@@ -94,6 +94,7 @@ public class SistemaDeReservasDeCanchasDeportivasTest {
 
 	}
 
+	@Test
 	public void dadoQueExisteUnaCanchaReservadaElClientePuedeCancelarSuReserva() {
 
 		GestorDeReserva gestor = new GestorDeReserva();
