@@ -49,7 +49,7 @@ public abstract class Cancha {
 
 	@Override
 	public String toString() {
-		return this.tipoDeCancha + "por $" + this.precioBasePorHora + "/hora.  ID: " + idCancha;
+		return this.tipoDeCancha + " por $" + this.precioBasePorHora + "/hora.  ID: " + idCancha;
 	}
 	
 }

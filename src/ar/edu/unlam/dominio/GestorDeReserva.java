@@ -73,6 +73,7 @@ public class GestorDeReserva {
 
 	public Double finalizarReserva(Integer IdDeReserva) {
 		ReservaBase reservaAFinalizar = obtenerReservaPorId(IdDeReserva);
+		this.reservas.remove(reservaAFinalizar);
 		return reservaAFinalizar.calcularPrecioFinal();
 	}
 

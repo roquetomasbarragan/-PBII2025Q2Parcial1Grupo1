@@ -89,13 +89,6 @@ public class ReservaBase implements Tarifable{
 	}
 
 	
-	
-	@Override
-	public String toString() {
-		return "El cliente " + clienteTitular.getNombre() + " reservo la " + cancha.getTipoDeCancha() + ", el dia " + horaInicio.toLocalDate() + " a las " + horaInicio.toLocalTime()
-				+ ". ID DE RESERVA: " + idReserva;
-	}
-
 	@Override
 	public Double calcularPrecioFinal() {
 		Double precioFinal = 0.0;
@@ -106,6 +99,13 @@ public class ReservaBase implements Tarifable{
 		return precioFinal;
 	}
 	
+	@Override
+	public String toString() {
+		return "El cliente " + clienteTitular.getNombre() + " reservo la " + cancha.getTipoDeCancha() + ", el dia " + horaInicio.toLocalDate() + " a las " + horaInicio.toLocalTime()
+				+ ". ID DE RESERVA: " + idReserva;
+	}
+
+
 
 
 }

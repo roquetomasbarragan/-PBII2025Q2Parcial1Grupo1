@@ -37,10 +37,12 @@ public class SistemaDeReservasDeCanchas {
 			case AGREGAR_ITEMS_ADICIONALES:
 				agregarItemsAdicionales(gestor);
 				break;
+			case FINALIZAR_RESERVA:
+				finalizarReserva(gestor);
 			case VER_RESERVAS_REALIZADAS:
 				verReservasRealizadas(gestor);
 				break;
-			case CANCELAR_CANCHA:
+			case CANCELAR_RESERVA:
 				cancelarReserva(gestor);
 				break;
 			case MOSTRAR_RESERVAS:
@@ -61,8 +63,42 @@ public class SistemaDeReservasDeCanchas {
 
 	}
 
-	private static void verReservasRealizadas(GestorDeReserva gestor) {
+	private static void finalizarReserva(GestorDeReserva gestor) {
 		if (verificaSiExistenReservas(gestor)) {			
+			mostrarMensaje("\n--- Finalizar Reserva ---\nReservas realizadas: ");
+			verReservasRealizadas(gestor);
+			
+			Integer idReserva = ingresarEntero("Ingrese el ID de la reserva a finalizar: ");
+			
+			ReservaBase reserva = gestor.obtenerReservaPorId(idReserva);
+			
+			if (reserva == null) {
+				mostrarMensaje("No se encontró una reserva con ese ID.");
+				return;
+			}
+			
+			mostrarMensaje("Reserva encontrada:");
+			mostrarMensaje("Cliente: " + reserva.getClienteTitular().getNombre());
+			mostrarMensaje("Hora: " + reserva.getHoraInicio());
+			
+			String confirmacion = ingresarString("¿Confirma la finalizacion? (S/N): ");
+			
+			if (confirmacion.equalsIgnoreCase("S")) {
+				Double montoTotal = gestor.finalizarReserva(idReserva);
+	
+				mostrarMensaje("Monto total a abonar " + montoTotal + "\nGracias por su visita!");
+				
+				} else {
+				mostrarMensaje("Finalizacion abortada.");
+			}
+			
+		} else {
+			mostrarMensaje("No se ha realizado ningúna reserva aún");
+		}
+	}
+
+	private static void verReservasRealizadas(GestorDeReserva gestor) {
+		if (verificaSiExistenReservas(gestor)) {
 			mostrarTodasLasReservas(gestor.getReservas());
 		} else {
 			mostrarMensaje("No se ha realizado ningúna reserva aún");
@@ -70,16 +106,16 @@ public class SistemaDeReservasDeCanchas {
 	}
 
 	private static void mostrarDisponibles(GestorDeReserva gestor) {
-		if (verificaSiExistenCanchasParaReservar(gestor)) {			
+		if (verificaSiExistenCanchasParaReservar(gestor)) {
 			LocalDateTime momento = fechaYHoraValidada("Ingrese el horario que desee.");
 			mostrarCanchasDisponibles(gestor.obtenerCanchasDisponibles(momento));
 		} else {
-			mostrarMensaje("Error. Todavia no se ah creado ninguna cancha");
+			mostrarMensaje("Error. Todavia no se ha creado ninguna cancha");
 		}
 	}
 
 	private static void mostrarReservas(GestorDeReserva gestor) {
-		if (verificaSiExistenReservas(gestor)) {			
+		if (verificaSiExistenReservas(gestor)) {
 			LocalDateTime momento = fechaYHoraValidada("Ingrese el horario que desee.");
 			mostrarTodasLasReservas(gestor.obtenerReservasConUnHorarioEspecifico(momento));
 		} else {
@@ -112,10 +148,10 @@ public class SistemaDeReservasDeCanchas {
 			mostrarMensaje("Opción inválida.");
 			return;
 		}
-		
+
 		Boolean seAgrego = gestor.agregarCancha(cancha);
 		if (seAgrego) {
-			mostrarMensaje("Se agregó la cancha de " + cancha.getTipoDeCancha() + " con ID: " + cancha.getIdCancha() + " por $"
+			mostrarMensaje("Se agregó la " + cancha.getTipoDeCancha() + " con ID: " + cancha.getIdCancha() + " por $"
 					+ cancha.getPrecioBasePorHora() + "/hora");
 		}
 	}
@@ -126,13 +162,16 @@ public class SistemaDeReservasDeCanchas {
 			mostrarMensaje("\n--- Reservar Cancha ---");
 
 			LocalDateTime horaDeInicio = asignarHoraDeReserva(gestor);
-
 			Cancha cancha = validarIdDeCancha(gestor);
 			Cliente cliente = crearCliente();
 
 			ReservaBase nuevaReserva = new ReservaBase(cliente, cancha, horaDeInicio);
 
-			gestor.agregarReserva(nuevaReserva);
+			if (gestor.agregarReserva(nuevaReserva)) {
+				mostrarMensaje("La cancha se reservó exitosamente");
+			} else {
+				mostrarMensaje("Ha ocurrido un error, intentelo de nuevo");
+			}
 		} else {
 			mostrarMensaje("Error. Aún no existen canchas para reservar");
 		}
@@ -145,7 +184,7 @@ public class SistemaDeReservasDeCanchas {
 		}
 		return existenCanchas;
 	}
-	
+
 	public static Boolean verificaSiExistenReservas(GestorDeReserva gestor) {
 		Boolean existenReservas = false;
 		if (gestor.getReservas().size() > 0) {
@@ -155,7 +194,6 @@ public class SistemaDeReservasDeCanchas {
 	}
 
 	public static Cancha validarIdDeCancha(GestorDeReserva gestor) {
-
 		Boolean idInvalido;
 		Cancha cancha;
 
@@ -197,6 +235,7 @@ public class SistemaDeReservasDeCanchas {
 			}
 
 		} while (!esValida || !hayCanchasDisponibles);
+		
 
 		mostrarCanchasDisponibles(gestor.obtenerCanchasDisponibles(horaDeInicio));
 		return horaDeInicio;
@@ -297,81 +336,92 @@ public class SistemaDeReservasDeCanchas {
 	}
 
 	private static void agregarItemsAdicionales(GestorDeReserva gestor) {
-		mostrarMensaje("\n--- Agregar Items Adicionales ---");
+		if (verificaSiExistenReservas(gestor)) {
+			mostrarMensaje("\n--- Agregar Items Adicionales ---\nReservas realizadas: ");
 
-		Integer idReserva = ingresarEntero("Ingrese el ID de la reserva: ");
-		ReservaBase reserva = gestor.obtenerReservaPorId(idReserva);
+			verReservasRealizadas(gestor);
+			Integer idReserva = ingresarEntero("Ingrese el ID de la reserva: ");
 
-		if (reserva == null) {
-			mostrarMensaje("No se encontró una reserva con ese ID.");
-			return;
-		}
+			ReservaBase reserva = gestor.obtenerReservaPorId(idReserva);
 
-		mostrarMensaje("1. Pelota de Fútbol ($5000)");
-		mostrarMensaje("2. Raquetas de Tenis ($7000 x capacidad)");
-		mostrarMensaje("3. Descuento Estudiante (10%)");
+			if (reserva == null) {
+				mostrarMensaje("No se encontró una reserva con ese ID.");
+				return;
+			}
 
-		Integer opcion = ingresarEntero("Seleccione el item: ");
+			mostrarMensaje("1. Pelota de Fútbol ($5000)");
+			mostrarMensaje("2. Raquetas de Tenis ($7000 x capacidad)");
+			mostrarMensaje("3. Descuento Estudiante (10%)");
 
-		ItemAdicional item = null;
-		String nombreItem = "";
+			Integer opcion = ingresarEntero("Seleccione el item: ");
 
-		switch (opcion) {
-		case 1:
-			item = new PelotaDeFutbol();
-			nombreItem = "Pelota de Fútbol";
-			break;
-		case 2:
-			item = new RaquetaDeTenis();
-			nombreItem = "Raquetas de Tenis";
-			break;
-		case 3:
-			item = new DescuentoEstudiante();
-			nombreItem = "Descuento Estudiante";
-			break;
-		default:
-			mostrarMensaje("Opción inválida.");
-			return;
-		}
+			ItemAdicional item = null;
+			String nombreItem = "";
 
-		Boolean seAgrego = reserva.agregarItemAdicional(item);
+			switch (opcion) {
+			case 1:
+				item = new PelotaDeFutbol();
+				nombreItem = "Pelota de Fútbol";
+				break;
+			case 2:
+				item = new RaquetaDeTenis();
+				nombreItem = "Raquetas de Tenis";
+				break;
+			case 3:
+				item = new DescuentoEstudiante();
+				nombreItem = "Descuento Estudiante";
+				break;
+			default:
+				mostrarMensaje("Opción inválida.");
+				return;
+			}
 
-		if (seAgrego) {
-			mostrarMensaje("Se agregó " + nombreItem + " a la reserva.");
-			mostrarMensaje("Total de items: " + reserva.getCantidadItems());
+			Boolean seAgrego = reserva.agregarItemAdicional(item);
+
+			if (seAgrego) {
+				mostrarMensaje("Se agregó " + nombreItem + " a la reserva.");
+				mostrarMensaje("Total de items: " + reserva.getCantidadItems());
+			} else {
+				mostrarMensaje("No se pudo agregar el item. No es compatible con la cancha reservada.");
+			}
 		} else {
-			mostrarMensaje("No se pudo agregar el item. No es compatible con la cancha reservada.");
+			mostrarMensaje("Todavia no existen reservas a las cuales se les pueda agregar items");
 		}
 	}
 
 	private static void cancelarReserva(GestorDeReserva gestor) {
-		mostrarMensaje("\n--- Cancelar Reserva ---");
+		if (verificaSiExistenReservas(gestor)) {
+			mostrarMensaje("\n--- Cancelar Reserva ---\nReservas realizadas: ");
+			verReservasRealizadas(gestor);
 
-		Integer idReserva = ingresarEntero("Ingrese el ID de la reserva a cancelar: ");
+			Integer idReserva = ingresarEntero("Ingrese el ID de la reserva a cancelar: ");
 
-		ReservaBase reserva = gestor.obtenerReservaPorId(idReserva);
+			ReservaBase reserva = gestor.obtenerReservaPorId(idReserva);
 
-		if (reserva == null) {
-			mostrarMensaje("No se encontró una reserva con ese ID.");
-			return;
-		}
+			if (reserva == null) {
+				mostrarMensaje("No se encontró una reserva con ese ID.");
+				return;
+			}
 
-		mostrarMensaje("Reserva encontrada:");
-		mostrarMensaje("Cliente: " + reserva.getClienteTitular().getNombre());
-		mostrarMensaje("Hora: " + reserva.getHoraInicio());
+			mostrarMensaje("Reserva encontrada:");
+			mostrarMensaje("Cliente: " + reserva.getClienteTitular().getNombre());
+			mostrarMensaje("Hora: " + reserva.getHoraInicio());
 
-		String confirmacion = ingresarString("¿Confirma la cancelación? (S/N): ");
+			String confirmacion = ingresarString("¿Confirma la cancelación? (S/N): ");
 
-		if (confirmacion.equalsIgnoreCase("S")) {
-			Boolean seCancelo = gestor.cancelarReservaPorId(idReserva);
+			if (confirmacion.equalsIgnoreCase("S")) {
+				Boolean seCancelo = gestor.cancelarReservaPorId(idReserva);
 
-			if (seCancelo) {
-				mostrarMensaje("Reserva cancelada exitosamente.");
+				if (seCancelo) {
+					mostrarMensaje("Reserva cancelada exitosamente.");
+				} else {
+					mostrarMensaje("No se pudo cancelar la reserva.");
+				}
 			} else {
-				mostrarMensaje("No se pudo cancelar la reserva.");
+				mostrarMensaje("Cancelación abortada.");
 			}
 		} else {
-			mostrarMensaje("Cancelación abortada.");
+			mostrarMensaje("Todavía no se ha registrado ningúna reserva");
 		}
 	}
 
@@ -391,10 +441,11 @@ public class SistemaDeReservasDeCanchas {
 
 	public static void mostrarCanchasDisponibles(HashSet<Cancha> canchas) {
 		for (Cancha cancha : canchas) {
+			mostrarMensaje ("Canchas disponibles: ");
 			mostrarMensaje(cancha.toString());
 		}
 	}
-	
+
 	public static void mostrarTodasLasReservas(HashSet<ReservaBase> reservas) {
 		for (ReservaBase reserva : reservas) {
 			mostrarMensaje(reserva.toString());
