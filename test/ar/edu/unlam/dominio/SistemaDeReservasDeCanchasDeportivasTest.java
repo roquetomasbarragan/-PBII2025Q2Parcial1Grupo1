@@ -311,9 +311,53 @@ public class SistemaDeReservasDeCanchasDeportivasTest {
 		Double valorEsperado = 25000D;
 		
 		assertEquals(valorEsperado, valorObtenido);
-		
-		
 	}
+		
+		@Test
+		public void dadoQueExisteUnGestorDeReservaDeCanchasSePuedeCrearUnaCanchaExitosamenteElMetodoDevuelveTrue() {
+			GestorDeReserva gestor = new GestorDeReserva();
+			
+			Double precioBasePorHora = 2800.00;
+			
+			Cancha canchaDeFutbol = new CanchaDeFutbol7(precioBasePorHora);
+			
+			Boolean seAgrego = gestor.agregarCancha(canchaDeFutbol);
+			
+			assertTrue(seAgrego);
+		}
+			@Test
+			public void  dadoQueExisteUnaReservaDeUnClienteJubiladoSeAplicaUnDescuentoDel15PorCientoEnElPrecioFinal() {
+				
+				GestorDeReserva gestor = new GestorDeReserva();
+				
+				Double precioBasePorHora = 20000.00;
+				
+				Cancha cancha = new CanchaDeFutbol5(precioBasePorHora);
+				gestor.agregarCancha(cancha);
+				
+				LocalDateTime horaInicio = LocalDateTime.of(2025, 10, 01, 20, 00);
+				
+				Cliente clienteJubilado = new Cliente("Carlos", 789);
+				ReservaBase reserva = new ReservaBase(clienteJubilado, cancha, horaInicio);
+				gestor.agregarReserva(reserva);
+				
+				DescuentoJubilados reservaConDescuento = new DescuentoJubilados(reserva);
+				
+				Double precioEsperado = 17000.00;
+				Double precioObtenido = reservaConDescuento.calcularPrecioFinal();
+				
+				assertEquals(precioEsperado, precioObtenido);
+			}
+				
+				
+				
+				
+				
+				
+				
+			}
+		
+	
 	
 
 	
@@ -321,4 +365,4 @@ public class SistemaDeReservasDeCanchasDeportivasTest {
 	
 	
 	
-}
+
