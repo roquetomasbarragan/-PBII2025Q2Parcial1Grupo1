@@ -6,6 +6,7 @@ public abstract class Cancha {
 
 	private Double precioBasePorHora;
 	private Integer idCancha;
+	protected String tipoDeCancha;
 
 	public Cancha( Double precioBasePorHora) {
 		this.precioBasePorHora = precioBasePorHora;
@@ -42,15 +43,13 @@ public abstract class Cancha {
 		return idCancha;
 	}
 
-	@Override
-	public String toString() {
-		return "Cancha [precioBasePorHora=" + precioBasePorHora + ", idCancha=" + idCancha + "]";
+	public String getTipoDeCancha() {
+		return tipoDeCancha;
 	}
 
-	
-
-	
-
-	
+	@Override
+	public String toString() {
+		return this.tipoDeCancha + "por $" + this.precioBasePorHora + "/hora.  ID: " + idCancha;
+	}
 	
 }

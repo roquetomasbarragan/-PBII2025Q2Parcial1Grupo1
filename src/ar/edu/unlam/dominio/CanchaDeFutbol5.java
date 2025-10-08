@@ -6,7 +6,7 @@ public class CanchaDeFutbol5 extends CanchaDeFutbol {
 	
 	public CanchaDeFutbol5 (Double precioBase) {
 		super(precioBase);
-		
+		this.tipoDeCancha = "cancha de futbol 5";
 	}
 
 	@Override

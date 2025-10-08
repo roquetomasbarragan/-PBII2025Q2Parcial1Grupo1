@@ -71,12 +71,6 @@ public class ReservaBase implements Tarifable{
 		this.idReserva = id;
 	}
 
-	public Boolean estaActiva(LocalDateTime momento) {
-		Boolean estaActiva = !momento.isBefore(this.horaInicio) && !momento.isAfter(this.horaFinal);
-		return estaActiva;
-	}
-
-
 	public Boolean agregarItemAdicional(ItemAdicional item) {
 
 		if (item.esCompatibleConLaCancha(this.cancha)) {
@@ -95,6 +89,13 @@ public class ReservaBase implements Tarifable{
 	}
 
 	
+	
+	@Override
+	public String toString() {
+		return "El cliente " + clienteTitular.getNombre() + " reservo la " + cancha.getTipoDeCancha() + ", el dia " + horaInicio.toLocalDate() + " a las " + horaInicio.toLocalTime()
+				+ ". ID DE RESERVA: " + idReserva;
+	}
+
 	@Override
 	public Double calcularPrecioFinal() {
 		Double precioFinal = 0.0;

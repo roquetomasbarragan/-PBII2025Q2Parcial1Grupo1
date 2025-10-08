@@ -37,11 +37,17 @@ public class SistemaDeReservasDeCanchas {
 			case AGREGAR_ITEMS_ADICIONALES:
 				agregarItemsAdicionales(gestor);
 				break;
-			case RESERVAR_CANCHA:
-				mostrarMensaje("Use la opción 2 para agregar reservas.");
+			case VER_RESERVAS_REALIZADAS:
+				verReservasRealizadas(gestor);
 				break;
 			case CANCELAR_CANCHA:
 				cancelarReserva(gestor);
+				break;
+			case MOSTRAR_RESERVAS:
+				mostrarReservas(gestor);
+				break;
+			case MOSTRAR_DISPONIBLES:
+				mostrarDisponibles(gestor);
 				break;
 			case SALIR:
 				mostrarMensaje("Saliendo...");
@@ -55,6 +61,32 @@ public class SistemaDeReservasDeCanchas {
 
 	}
 
+	private static void verReservasRealizadas(GestorDeReserva gestor) {
+		if (verificaSiExistenReservas(gestor)) {			
+			mostrarTodasLasReservas(gestor.getReservas());
+		} else {
+			mostrarMensaje("No se ha realizado ningúna reserva aún");
+		}
+	}
+
+	private static void mostrarDisponibles(GestorDeReserva gestor) {
+		if (verificaSiExistenCanchasParaReservar(gestor)) {			
+			LocalDateTime momento = fechaYHoraValidada("Ingrese el horario que desee.");
+			mostrarCanchasDisponibles(gestor.obtenerCanchasDisponibles(momento));
+		} else {
+			mostrarMensaje("Error. Todavia no se ah creado ninguna cancha");
+		}
+	}
+
+	private static void mostrarReservas(GestorDeReserva gestor) {
+		if (verificaSiExistenReservas(gestor)) {			
+			LocalDateTime momento = fechaYHoraValidada("Ingrese el horario que desee.");
+			mostrarCanchasDisponibles(gestor.obtenerCanchasReservadas(momento));
+		} else {
+			mostrarMensaje("Nadie ha hecho ninguna reserva aún");
+		}
+	}
+
 	private static void agregarCancha(GestorDeReserva gestor) {
 		mostrarMensaje("\n--- Agregar Cancha ---\n" + "1. Cancha de Fútbol 5\n" + "2. Cancha de Fútbol 8\n"
 				+ "3. Cancha de Fútbol 11\n" + "4. Cancha de Tenis");
@@ -63,33 +95,27 @@ public class SistemaDeReservasDeCanchas {
 		Double precioCancha = ingresarDouble("Ingrese el precio base por hora");
 
 		Cancha cancha;
-		String tipoCancha;
-
 		switch (opcion) {
 		case 1:
 			cancha = new CanchaDeFutbol5(precioCancha);
-			tipoCancha = "Fútbol 5";
 			break;
 		case 2:
 			cancha = new CanchaDeFutbol8(precioCancha);
-			tipoCancha = "Fútbol 8";
 			break;
 		case 3:
 			cancha = new CanchaDeFutbol11(precioCancha);
-			tipoCancha = "Fútbol 11";
 			break;
 		case 4:
 			cancha = new CanchaDeTenis(precioCancha);
-			tipoCancha = "Tenis";
 			break;
 		default:
 			mostrarMensaje("Opción inválida.");
 			return;
 		}
-
+		
 		Boolean seAgrego = gestor.agregarCancha(cancha);
 		if (seAgrego) {
-			mostrarMensaje("Se agregó la cancha de " + tipoCancha + " con ID: " + cancha.getIdCancha() + " por $"
+			mostrarMensaje("Se agregó la cancha de " + cancha.getTipoDeCancha() + " con ID: " + cancha.getIdCancha() + " por $"
 					+ cancha.getPrecioBasePorHora() + "/hora");
 		}
 	}
@@ -118,6 +144,14 @@ public class SistemaDeReservasDeCanchas {
 			existenCanchas = true;
 		}
 		return existenCanchas;
+	}
+	
+	public static Boolean verificaSiExistenReservas(GestorDeReserva gestor) {
+		Boolean existenReservas = false;
+		if (gestor.getReservas().size() > 0) {
+			existenReservas = true;
+		}
+		return existenReservas;
 	}
 
 	public static Cancha validarIdDeCancha(GestorDeReserva gestor) {
@@ -151,13 +185,7 @@ public class SistemaDeReservasDeCanchas {
 		Boolean hayCanchasDisponibles;
 
 		do {
-			mostrarMensaje("Ingrese la fecha y hora de inicio:");
-			Integer mes = validarMes();
-			Integer dia = validarDia();
-			Integer hora = validarHora();
-			Integer minuto = validarMinuto();
-
-			horaDeInicio = LocalDateTime.of(2025, mes, dia, hora, minuto);
+			horaDeInicio = fechaYHoraValidada("Ingrese la fecha y hora de inicio:");
 			esValida = validarHoraDeInicio(horaDeInicio);
 			hayCanchasDisponibles = gestor.obtenerCanchasDisponibles(horaDeInicio).size() > 0;
 
@@ -171,6 +199,18 @@ public class SistemaDeReservasDeCanchas {
 		} while (!esValida || !hayCanchasDisponibles);
 
 		mostrarCanchasDisponibles(gestor.obtenerCanchasDisponibles(horaDeInicio));
+		return horaDeInicio;
+	}
+
+	public static LocalDateTime fechaYHoraValidada(String mensaje) {
+		LocalDateTime horaDeInicio;
+		mostrarMensaje(mensaje);
+		Integer mes = validarMes();
+		Integer dia = validarDia();
+		Integer hora = validarHora();
+		Integer minuto = validarMinuto();
+
+		horaDeInicio = LocalDateTime.of(2025, mes, dia, hora, minuto);
 		return horaDeInicio;
 	}
 
@@ -350,10 +390,14 @@ public class SistemaDeReservasDeCanchas {
 	}
 
 	public static void mostrarCanchasDisponibles(HashSet<Cancha> canchas) {
-
 		for (Cancha cancha : canchas) {
 			mostrarMensaje(cancha.toString());
-
+		}
+	}
+	
+	public static void mostrarTodasLasReservas(HashSet<ReservaBase> reservas) {
+		for (ReservaBase reserva : reservas) {
+			mostrarMensaje(reserva.toString());
 		}
 	}
 
