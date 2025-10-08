@@ -112,7 +112,7 @@ public class GestorDeReserva {
 		return reservas;
 	}
 
-	public HashSet<Cancha> obtenerCanchasReservadas(LocalDateTime horaDeInicio) {
+	public HashSet<Cancha> obtenerCanchasReservadasConUnHorarioEspecifico(LocalDateTime horaDeInicio) {
 		HashSet<Cancha> hashSetTemporalDeCanchasReservadas = new HashSet<>();
 
 			for (ReservaBase reserva : reservas) {
@@ -121,6 +121,18 @@ public class GestorDeReserva {
 				}
 			}
 		
+		return hashSetTemporalDeCanchasReservadas;
+	}
+	
+	public HashSet<ReservaBase> obtenerReservasConUnHorarioEspecifico(LocalDateTime horaDeInicio) {
+		HashSet<ReservaBase> hashSetTemporalDeCanchasReservadas = new HashSet<>();
+		
+		for (ReservaBase reserva : reservas) {
+			if (yaSeReservoLaCanchaEnEseRangoHorarioConLocalDate(reserva,horaDeInicio)) {
+				hashSetTemporalDeCanchasReservadas.add(reserva);
+			}
+			
+		}
 		return hashSetTemporalDeCanchasReservadas;
 	}
 	
@@ -140,7 +152,7 @@ public class GestorDeReserva {
 	public ArrayList<Integer> obtenerCanchasIdDeCanchasReservadas(LocalDateTime horaDeInicio) {
 		ArrayList<Integer> IdDeCanchasReservadas = new ArrayList<>();
 		
-		for (Cancha cancha : obtenerCanchasReservadas(horaDeInicio)) {
+		for (Cancha cancha : obtenerCanchasReservadasConUnHorarioEspecifico(horaDeInicio)) {
 			IdDeCanchasReservadas.add(cancha.getIdCancha());
 		}
 		

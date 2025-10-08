@@ -81,7 +81,7 @@ public class SistemaDeReservasDeCanchas {
 	private static void mostrarReservas(GestorDeReserva gestor) {
 		if (verificaSiExistenReservas(gestor)) {			
 			LocalDateTime momento = fechaYHoraValidada("Ingrese el horario que desee.");
-			mostrarCanchasDisponibles(gestor.obtenerCanchasReservadas(momento));
+			mostrarTodasLasReservas(gestor.obtenerReservasConUnHorarioEspecifico(momento));
 		} else {
 			mostrarMensaje("Nadie ha hecho ninguna reserva aún");
 		}
