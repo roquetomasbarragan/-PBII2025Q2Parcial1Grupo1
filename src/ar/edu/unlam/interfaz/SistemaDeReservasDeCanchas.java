@@ -1,6 +1,5 @@
 package ar.edu.unlam.interfaz;
 
-
 import java.util.Scanner;
 
 import ar.edu.unlam.dominio.Cancha;
@@ -160,7 +159,7 @@ public class SistemaDeReservasDeCanchas {
 
 			horaDeInicio = LocalDateTime.of(2025, mes, dia, hora, minuto);
 			esValida = validarHoraDeInicio(horaDeInicio);
-			hayCanchasDisponibles = (gestor.obtenerCanchasDisponibles(horaDeInicio).size() == 0);
+			hayCanchasDisponibles = gestor.obtenerCanchasDisponibles(horaDeInicio).size() > 0;
 
 			if (!esValida) {
 				mostrarMensaje("Hubo un error, intentelo de nuevo\n");
@@ -352,12 +351,11 @@ public class SistemaDeReservasDeCanchas {
 
 	public static void mostrarCanchasDisponibles(HashSet<Cancha> canchas) {
 
-			for (Cancha cancha : canchas) {
-				mostrarMensaje(cancha.toString());
-			
+		for (Cancha cancha : canchas) {
+			mostrarMensaje(cancha.toString());
+
 		}
 	}
-
 
 	public static void mostrarMensaje(String mensaje) {
 		System.out.println(mensaje);
@@ -366,12 +364,14 @@ public class SistemaDeReservasDeCanchas {
 	public static Integer ingresarEntero(String mensaje) {
 		mostrarMensaje(mensaje);
 		Integer numero = teclado.nextInt();
+		teclado.nextLine();
 		return numero;
 	}
 
 	public static Double ingresarDouble(String mensaje) {
 		mostrarMensaje(mensaje);
 		Double numero = teclado.nextDouble();
+		teclado.nextLine();
 		return numero;
 	}
 

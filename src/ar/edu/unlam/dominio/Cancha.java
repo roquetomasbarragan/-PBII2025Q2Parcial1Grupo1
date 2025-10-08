@@ -4,7 +4,6 @@ import java.util.Objects;
 
 public abstract class Cancha {
 
-	
 	private Double precioBasePorHora;
 	private Integer idCancha;
 

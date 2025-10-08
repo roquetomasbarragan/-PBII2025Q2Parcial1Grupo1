@@ -1,6 +1,7 @@
 package ar.edu.unlam.dominio;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
 
 public class GestorDeReserva {
@@ -107,9 +108,26 @@ public class GestorDeReserva {
 	
 	public HashSet<Cancha> obtenerCanchasDisponibles(LocalDateTime horaDeInicio) {
 		HashSet<Cancha> hashSetTemporalDeCanchasDisponibles = new HashSet<>();
-		hashSetTemporalDeCanchasDisponibles = this.canchas;
-		hashSetTemporalDeCanchasDisponibles.removeAll(obtenerCanchasReservadas(horaDeInicio));
+		ArrayList<Integer> IdDeCanchasReservadas = obtenerCanchasIdDeCanchasReservadas(horaDeInicio);
+		
+		for (Cancha cancha : this.canchas) {
+			 if (!IdDeCanchasReservadas.contains(cancha.getIdCancha())) {
+				 hashSetTemporalDeCanchasDisponibles.add(cancha);
+		        }
+		}
 		
 		return hashSetTemporalDeCanchasDisponibles;
 	}
+	
+	public ArrayList<Integer> obtenerCanchasIdDeCanchasReservadas(LocalDateTime horaDeInicio) {
+		ArrayList<Integer> IdDeCanchasReservadas = new ArrayList<>();
+		
+		for (Cancha cancha : obtenerCanchasReservadas(horaDeInicio)) {
+			IdDeCanchasReservadas.add(cancha.getIdCancha());
+		}
+		
+		return IdDeCanchasReservadas;
+	}
+	
+	
 }
